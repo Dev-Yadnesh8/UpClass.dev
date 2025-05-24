@@ -12,7 +12,10 @@ app.use(express.json({limit: "16kb"}));
 app.use(express.urlencoded({extended:true})); // "extended" true allows nested objects
 app.use(cookieParser());
 
+// Routes
+import userRouter from "./routes/user.route.js";
 
+app.use("/api/v1/user",userRouter);
 
 
 export {app}
