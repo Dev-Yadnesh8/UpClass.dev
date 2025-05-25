@@ -4,6 +4,23 @@ import ApiResponse from "../utils/apiResponse.js";
 import UserValidator from "../validators/user.validator.js";
 import { User } from "../models/user.model.js";
 
+const generateAccessAndRefreshTokens = async (userId)=>{
+    try {
+        console.log("User iD" , userId);
+        
+      const user = await User.findById({_id :userId});
+      const accessToken =  user.generateAccessToken();
+      const refreshToken =  user.generateRefreshToken();
+      user.refreshToken = refreshToken;
+      await user.save({validateBeforeSave : false});
+      return {accessToken,refreshToken};
+    } catch (error) {
+        console.log(error);
+        
+        throw new ApiError(500,"Something went wrong while generating tokens");
+    }
+}
+
 const signUp = asyncHandler(async (req, res) => {
   // Step1: Get data form user & Validate data
   const result = UserValidator.validateSignUp(req.body);
@@ -14,11 +31,11 @@ const signUp = asyncHandler(async (req, res) => {
   const { username, email, password } = result.data;
 
   // Step2 : Check if user already exist
-  const existingUser = User.findOne({
+  const existingUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
-  if (!existingUser) {
+  if (existingUser) {
     throw new ApiError(
       409,
       "Email or username is already in use. Please use a different email or username, or log in."
@@ -46,7 +63,51 @@ const signUp = asyncHandler(async (req, res) => {
   // Setp5 : Send successful response
   return res
     .status(201)
-    .json(new ApiResponse(200, "User created successfully", createdUser));
+    .json(new ApiResponse(200, "Your account has been created. Let’s get started!", createdUser));
 });
 
-export { signUp };
+const signIn = asyncHandler(async (req,res)=>{
+    //Step1 : Get data from user and validate it. 
+    const result = UserValidator.validateSignIn(req.body);
+    if(!result.success){
+        throw new ApiError(422,"Validation error",result.errors);
+    }
+
+    //Step2: Check if user existis or not.
+    const {identifier,password} = result.data;
+    const user = await User.findOne({ $or : [{email : identifier},{username:identifier}]});
+    if(!user){
+        throw new ApiError(404,"It looks like you don’t have an account yet. Please sign up.");
+    }
+
+    
+    //Step3 : Validate user credintials with backend credintials & generate tokens.
+    const isPasswordCorrect = await  user.checkPassword(password);
+    if(!isPasswordCorrect){
+        throw new ApiError(401, "Invalid email/username or password. Please try again.");
+    }
+
+    const {accessToken,refreshToken} = await generateAccessAndRefreshTokens(user._id.toHexString());
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+
+    //Step4 : Send token & response 
+    const cookieOptions = {
+        httpOnly : true,
+        secure : true
+    }
+   return res.status(200).cookie("accessToken",accessToken,cookieOptions).cookie("refreshToken",refreshToken,cookieOptions).json(
+        new ApiResponse(200,"Login Successful",{accessToken,refreshToken,user :loggedInUser})
+    );
+});
+
+const logoutUser = asyncHandler(async(req,res)=>{
+   await User.findByIdAndUpdate(req.user._id,{$set:{ refreshToken : undefined}},{new : true});
+    const cookieOptions = {
+        httpOnly : true,
+        secure : true
+    }
+   return res.status(200).clearCookie("accessToken",cookieOptions).clearCookie("refreshToken",cookieOptions).json(new ApiResponse(200,"User logout successfully"));
+
+
+});
+export { signUp,signIn,logoutUser };
