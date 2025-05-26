@@ -183,4 +183,44 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
-export { signUp, signIn, logoutUser, refreshAccessToken };
+
+const changePassword = asyncHandler(async (req, res) => {
+
+  //Step1: Get new and old pass form user
+  const result =  UserValidator.validateChangePassword(req.body);
+  if (!result.success) {
+    throw new ApiError(422, "Validation failed", result.errors);
+  }
+  const {newPassword,oldPassword} = result.data;
+  if(newPassword === oldPassword){
+    throw new ApiError(400,"Both passwords cannot be same");
+  }
+
+  //Step2: Verify old password with db's password
+  const user = await User.findById(req.user?._id);
+  const isPasswordCorrect = await user.checkPassword(oldPassword);
+  if (!isPasswordCorrect) {
+    throw new ApiError(400, "Invalid password");
+  }
+  //Step3:  Update and save the new password
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Password changed successfully"));
+});
+
+const currentUser = asyncHandler((req, res) => {
+  res
+    .status(200)
+    .json(new ApiResponse(200, "User fetched successfully", req.user));
+});
+export {
+  signUp,
+  signIn,
+  logoutUser,
+  refreshAccessToken,
+  changePassword,
+  currentUser,
+};

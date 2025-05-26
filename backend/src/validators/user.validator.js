@@ -29,6 +29,11 @@ const signInSchema = z.object({
   password: passwordSchema,
 });
 
+const changePasswordSchema = z.object({
+    oldPassword : passwordSchema,
+    newPassword : passwordSchema
+});
+
 class UserValidator {
   static validateSignUp(data) {
     const result = signUpSchema.safeParse(data);
@@ -45,6 +50,19 @@ class UserValidator {
 
   static validateSignIn(data) {
     const result = signInSchema.safeParse(data);
+    if (!result.success) {
+      const errors = result.error.errors.reduce((acc, err) => {
+        const field = err.path[0];
+        acc[field] = err.message;
+        return acc;
+      }, {});
+      return { success: false, errors };
+    }
+    return { success: true, data: result.data };
+  }
+
+  static validateChangePassword(data){
+        const result = changePasswordSchema.safeParse(data);
     if (!result.success) {
       const errors = result.error.errors.reduce((acc, err) => {
         const field = err.path[0];
