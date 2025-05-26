@@ -216,6 +216,7 @@ const currentUser = asyncHandler((req, res) => {
     .status(200)
     .json(new ApiResponse(200, "User fetched successfully", req.user));
 });
+
 export {
   signUp,
   signIn,
