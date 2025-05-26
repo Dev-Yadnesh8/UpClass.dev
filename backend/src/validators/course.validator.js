@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const courseSchema = z.object({
   title: z.string().trim().min(3).max(50),
-  thumbnail: z.string().url("Invalid URL"), // cloudinary url
   description: z.string().trim(),
   price: z.coerce.number().min(0, "Price must be a positive number"),
 });

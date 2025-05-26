@@ -36,4 +36,8 @@ const createCourse = asyncHandler(async(req,res)=>{
     res.status(200).json(new ApiResponse(200,"Course created successfully",createdCourse));
 });
 
-export {createCourse}
+const getAllCourses = asyncHandler(async(req,res)=>{
+   const courses = await Course.find({});
+   res.status(200).json(new ApiResponse(200,"Courses fetched!!",courses));
+});
+export {createCourse,getAllCourses}

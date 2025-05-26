@@ -17,7 +17,7 @@ import userRouter from "./routes/user.route.js";
 import courseRouter from "./routes/course.route.js";
 
 app.use("/api/v1/user",userRouter);
-app.use("/api/v1/course",courseRouter);
+app.use("/api/v1/courses",courseRouter);
 
 
 export {app}
