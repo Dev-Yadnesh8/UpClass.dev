@@ -17,7 +17,7 @@ const createCourse = asyncHandler(async(req,res)=>{
     }
    
     //Step2: Upload thumbnail Img to cloudinary 
-   const cloudinaryThumbnail = await uploadToCloudinary(req.file?.path);
+   const cloudinaryThumbnail = await uploadToCloudinary(req.file?.path,"image");
    if(!cloudinaryThumbnail){
     throw new ApiError(500,"Failed to upload thumbnail. Please try again later");
    }

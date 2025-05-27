@@ -6,6 +6,10 @@ const videoSchema = new Schema({
         require : true,
         index:true,
     },
+    courseId : {
+        type: Schema.Types.ObjectId,
+        ref : 'Course',
+    },
     videoFile : {
         type: String,
     },
@@ -21,14 +25,17 @@ const videoSchema = new Schema({
     comments :[ {
         type: Schema.Types.ObjectId,
         ref : 'Comment',
+        default :[]
     }],
     likes :[ {
         type: Schema.Types.ObjectId,
         ref : 'User',
+        default :[]
     }],
     dislikes :[ {
         type: Schema.Types.ObjectId,
         ref : 'User',
+        default :[]
     }],
 },{timestamps :true});
 
