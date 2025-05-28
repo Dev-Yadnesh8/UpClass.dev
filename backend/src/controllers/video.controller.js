@@ -105,4 +105,53 @@ const deleteVideo = asyncHandler(async (req, res) => {
     );
 });
 
-export { postVideo, deleteVideo };
+const editVideo = asyncHandler(async(req,res)=>{
+  //Step1: Get video id and validate it 
+  const {videoId,courseId} = req.params;
+  if(videoId === "" || courseId === "" || (!mongoose.Types.ObjectId.isValid(videoId)) ||  (!mongoose.Types.ObjectId.isValid(courseId))){
+    throw new ApiError(400,"Invalid course ID or video ID.");
+  }
+  const course = await Course.findById(courseId);
+  if(!course){
+    throw new ApiError(404,"Course not found");
+  }
+  const video = await Video.findById(videoId);
+  if(!video){
+    throw new ApiError(404,"Video not found");
+  }
+
+  //Step2: Get the data form user and validate 
+  const result = VideoValidator.validateVideoData(req.body);
+  if (!result.success) {
+    throw new ApiError(422, "Validation error", result.errors);
+  }
+  const { title } = result.data;
+
+  //Step3: update the data 
+  video.title = title;
+  await video.save();
+
+  //Step4: Send successful response
+  return res.status(201).json(new ApiResponse(201,"Changes made successfully"));
+
+});
+
+const getVideos = asyncHandler(async(req,res)=>{
+  //Step1: Get courseID and validate it
+  const {courseId} = req.params; 
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+    throw new ApiError(400, "Invalid course ID format");
+  }
+  const course = await Course.findById(courseId);
+
+  if (!course) {
+    throw new ApiError(404, "Course not found.");
+  }
+  //Step2: Fetch all videos and send response
+ const videos = await Video.find({courseId}).select("-comments -likes -dislikes");
+ res.status(200).json(new ApiResponse(200,"Videos fetched successfully",videos));
+
+
+});
+
+export { postVideo, deleteVideo,editVideo,getVideos };
