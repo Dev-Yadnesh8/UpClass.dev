@@ -3,7 +3,7 @@ import ApiResponse from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import CourseValidator from "../validators/course.validator.js";
 import {Course} from "../models/course.model.js";
-import uploadToCloudinary from "../utils/cloudinary.js";
+import {uploadToCloudinary} from "../utils/cloudinary.js";
 
 const createCourse = asyncHandler(async(req,res)=>{
     //Step1: Get details form admin 

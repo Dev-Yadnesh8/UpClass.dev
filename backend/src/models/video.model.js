@@ -6,6 +6,9 @@ const videoSchema = new Schema({
         require : true,
         index:true,
     },
+    publicId : {
+        type:String,
+    },
     courseId : {
         type: Schema.Types.ObjectId,
         ref : 'Course',
