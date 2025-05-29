@@ -27,3 +27,11 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     throw new ApiError(401,"Invalid access token");
   }
 });
+
+export const checkIsAdmin = asyncHandler((req,res,next)=>{
+  //Step1: check the user role if not admin block the further req
+  if(req.user?.role !== "ADMIN"){
+    throw new ApiError(401, "Unauthorized request");
+  }
+  next();
+});

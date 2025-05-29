@@ -29,17 +29,7 @@ const videoSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref : 'Comment',
         default :[]
-    }],
-    likes :[ {
-        type: Schema.Types.ObjectId,
-        ref : 'User',
-        default :[]
-    }],
-    dislikes :[ {
-        type: Schema.Types.ObjectId,
-        ref : 'User',
-        default :[]
-    }],
+    }]
 },{timestamps :true});
 
 export const Video = mongoose.model('Video',videoSchema);

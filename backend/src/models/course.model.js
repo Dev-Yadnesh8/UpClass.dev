@@ -14,6 +14,9 @@ const courseSchema = new Schema({
         type: String,
         require : true,
     },
+    thumbnailPublicId:{
+        type: String
+    },
     price : {
         type: Number,
         require : true,
@@ -22,10 +25,11 @@ const courseSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref : 'Video',
     }],
-    purchasedBy :[ {
-        type: Schema.Types.ObjectId,
-        ref : 'User',
-    }],
+    visibility:{
+        type:String,
+        enum: ["PUBLIC","PRIVATE"],
+        default: "PUBLIC"
+    }
 },{timestamps :true});
 
 export const Course = mongoose.model('Course',courseSchema);
