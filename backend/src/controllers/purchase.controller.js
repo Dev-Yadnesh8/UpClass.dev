@@ -44,7 +44,7 @@ const getPurchasedCourse = asyncHandler(async (req, res) => {
     //Step2: Aggregate to get course details
     const purchasedCourses = await Purchase.aggregate([
         {
-            $match: { userId: new mongoose.Types.ObjectId(userId) }
+            $match: { userId }
         },
         {
             $lookup: {
