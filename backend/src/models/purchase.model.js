@@ -8,5 +8,5 @@ const purchaseSchama = new Schema({
         type : Schema.Types.ObjectId,
         ref: 'Course'
     }
-});
+},{timestamps:true});
 export const Purchase = mongoose.model('Purchase',purchaseSchama);

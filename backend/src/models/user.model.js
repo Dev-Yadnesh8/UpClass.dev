@@ -7,7 +7,6 @@ const userSchema = new Schema({
         type : String,
         required : true,
         lowercase : true,
-        index : true,
         minLength : [3,"Username must be greater than 3 characters"],
         maxLength : [20,"Username cannot exceed 20 characters"]
     },
@@ -22,10 +21,6 @@ const userSchema = new Schema({
         required : true,
         minLength : [6,"Password must be greater than 6 characters"]
     },
-    purchases:[  {
-        type : Schema.Types.ObjectId,
-        ref : 'Course'
-    }],
     watchHistory:  [{
         type : Schema.Types.ObjectId,
         ref : 'Video'
