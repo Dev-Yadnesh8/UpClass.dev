@@ -86,8 +86,11 @@ const deleteVideo = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Video not found");
   }
 
-    // Step4: Delete video file from Cloudinary
-  const cloudinaryResponse = await deleteFromCloudinary(video.publicId, "video");
+  // Step4: Delete video file from Cloudinary
+  const cloudinaryResponse = await deleteFromCloudinary(
+    video.publicId,
+    "video"
+  );
   if (!cloudinaryResponse || cloudinaryResponse.result !== "ok") {
     console.warn("Cloudinary deletion may have failed or file not found.");
     // Not throwing error here to allow soft failure of cloud cleanup
@@ -105,41 +108,79 @@ const deleteVideo = asyncHandler(async (req, res) => {
     );
 });
 
-const editVideo = asyncHandler(async(req,res)=>{
-  //Step1: Get video id and validate it 
-  const {videoId,courseId} = req.params;
-  if(videoId === "" || courseId === "" || (!mongoose.Types.ObjectId.isValid(videoId)) ||  (!mongoose.Types.ObjectId.isValid(courseId))){
-    throw new ApiError(400,"Invalid course ID or video ID.");
+const editVideo = asyncHandler(async (req, res) => {
+  //Step1: Get video id and validate it
+  const { videoId, courseId } = req.params;
+  if (
+    videoId === "" ||
+    courseId === "" ||
+    !mongoose.Types.ObjectId.isValid(videoId) ||
+    !mongoose.Types.ObjectId.isValid(courseId)
+  ) {
+    throw new ApiError(400, "Invalid course ID or video ID.");
   }
   const course = await Course.findById(courseId);
-  if(!course){
-    throw new ApiError(404,"Course not found");
+  if (!course) {
+    throw new ApiError(404, "Course not found");
   }
   const video = await Video.findById(videoId);
-  if(!video){
-    throw new ApiError(404,"Video not found");
+  if (!video) {
+    throw new ApiError(404, "Video not found");
   }
 
-  //Step2: Get the data form user and validate 
+  //Step2: Get the data form user and validate
   const result = VideoValidator.validateVideoData(req.body);
   if (!result.success) {
     throw new ApiError(422, "Validation error", result.errors);
   }
   const { title } = result.data;
 
-  //Step3: update the data 
+  //Step3: update the data
   video.title = title;
   await video.save();
 
   //Step4: Send successful response
-  return res.status(201).json(new ApiResponse(201,"Changes made successfully"));
-
+  return res
+    .status(201)
+    .json(new ApiResponse(201, "Changes made successfully"));
 });
 
-const getVideos = asyncHandler(async(req,res)=>{
+const markVideoAsWatch = asyncHandler(async (req, res) => {
+  //Step1: Get video id and validate it
+  const { videoId } = req.params;
+  if (!videoId || !mongoose.Types.ObjectId.isValid(videoId)) {
+    throw new ApiError(400, "Invalid video ID.");
+  }
+
+  //Step2: Update the video model
+  const video = await Video.findById(videoId);
+  if (!video) {
+    throw new ApiError(404, "Video not found");
+  }
+  const hasWatched = video.watchedBy.includes(userId);
+
+  if (hasWatched) {
+    // Remove user ID (unwatch)
+    video.watchedBy = video.watchedBy.filter(
+      (id) => id.toString() !== userId.toString()
+    );
+  } else {
+    // Add user ID (mark as watched)
+    video.watchedBy.push(userId);
+  }
+
+  await video.save();
+
+  //Step3: Send successful response
+  return res
+    .status(201)
+    .json(new ApiResponse(201, `${hasWatched? "Video marked as watched successfully" :"Video marked as unwatched successfully"}`));
+});
+
+const getVideos = asyncHandler(async (req, res) => {
   //Step1: Get courseID and validate it
-  const {courseId} = req.params; 
-    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+  const { courseId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(courseId)) {
     throw new ApiError(400, "Invalid course ID format");
   }
   const course = await Course.findById(courseId);
@@ -148,10 +189,12 @@ const getVideos = asyncHandler(async(req,res)=>{
     throw new ApiError(404, "Course not found.");
   }
   //Step2: Fetch all videos and send response
- const videos = await Video.find({courseId}).select("-comments -likes -dislikes");
- res.status(200).json(new ApiResponse(200,"Videos fetched successfully",videos));
-
-
+  const videos = await Video.find({ courseId }).select(
+    "-comments -likes -dislikes"
+  );
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Videos fetched successfully", videos));
 });
 
-export { postVideo, deleteVideo,editVideo,getVideos };
+export { postVideo, deleteVideo, editVideo, getVideos,markVideoAsWatch };

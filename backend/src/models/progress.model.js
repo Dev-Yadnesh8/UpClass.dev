@@ -11,10 +11,11 @@ const progressSchema = new Schema({
         ref : 'Course',
         required: true
     },
-    completedVideos :[ {
-        type: Schema.Types.ObjectId,
-        ref : 'Video',
-    }],
+    completedVideos : {
+        type: Number,
+        required: true,
+        default: 0,
+    },
     percentageCompleted : {
         type : Number,
         min : 0,

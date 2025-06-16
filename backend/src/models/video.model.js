@@ -20,11 +20,10 @@ const videoSchema = new Schema({
         type: Number,
         require : true,
     },
-    isWatched : {
-        type: Boolean,
-        require : true,
-        default : false
-    },
+    isWatched :[ {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    }],
     comments :[ {
         type: Schema.Types.ObjectId,
         ref : 'Comment',
