@@ -16,10 +16,12 @@ app.use(cookieParser());
 import userRouter from "./routes/user.route.js";
 import courseRouter from "./routes/course.route.js";
 import purchaseRouter from "./routes/purchase.route.js";
+import commentRouter from "./routes/comment.route.js";
 
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/courses",courseRouter);
 app.use("/api/v1/purchases",purchaseRouter);
+app.use("/api/v1/comment",commentRouter);
 
 
 export {app}
