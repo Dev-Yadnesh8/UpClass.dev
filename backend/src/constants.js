@@ -1,1 +1,1 @@
-export const DB_NAME = "codeverse"
+export const DB_NAME = "UpClass";

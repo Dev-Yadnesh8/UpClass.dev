@@ -1,9 +1,9 @@
-import { Course } from "../models/course.model";
-import { Progress } from "../models/progress.model";
-import { Video } from "../models/video.model";
-import ApiError from "../utils/apiError";
-import ApiResponse from "../utils/apiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
+import { Course } from "../models/course.model.js";
+import { Progress } from "../models/progress.model.js";
+import { Video } from "../models/video.model.js";
+import ApiError from "../utils/apiError.js";
+import ApiResponse from "../utils/apiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getCourseProgress = asyncHandler(async (req, res) => {
   //Step1: Get course id and validate it
