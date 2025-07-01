@@ -1,9 +1,9 @@
-import OfferingsCard from "../components/Offering_card";
-import { offerings } from "../data/offerings.js";
+import { OfferingsCard } from "../../components/index.js";
+import { offerings } from "../../data/offerings.js";
 
 function Landing() {
   return (
-    <div className="min-h-screen w-full font-poppins bg-darkBg flex justify-center px-4 py-12">
+    <div className=" font-poppins  flex justify-center px-4 py-12">
       <div className="w-full max-w-7xl text-white">
         {/* Hero Section */}
         <div className="text-center mb-16 px-4">
