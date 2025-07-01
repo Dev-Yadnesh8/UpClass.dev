@@ -1,8 +1,7 @@
-function App() {
-  console.log(import.meta.env.VITE_APP_NAME);
+import Landing from "./pages/Landing";
 
-  return <h1 className="bg-violet-500">Hello Upclass</h1>;
+function App() {
+  return <Landing />;
 }
 
 export default App;
- 
