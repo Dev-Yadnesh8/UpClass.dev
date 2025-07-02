@@ -1,29 +1,36 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
-  Routes,
 } from "react-router-dom";
-import { Layout } from "./components/index.js";
-import { Landing, Login, SignUp } from "./pages/index.js";
-
+import { Layout, PrivateRoute } from "./components/index.js";
+import { Home, Landing, Login, SignUp } from "./pages/index.js";
+import { Provider } from "react-redux";
+import { store } from "./store/store.js";
+import App from "./App.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route path="" element={<Landing />} />
       <Route path="sign-in" element={<Login />} />
       <Route path="sign-up" element={<SignUp />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/home" element={<Home />} />
+      </Route>
     </Route>
   )
 );
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <App>
+        <RouterProvider router={router} />
+      </App>
+    </Provider>
   </StrictMode>
 );

@@ -6,10 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signInSchema } from "../../utils/validators/auth";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { signIn } from "../../features/auth/authSlice";
 
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -21,6 +25,37 @@ function Login() {
 
   const onSubmit = (data) => {
     console.log(data);
+    const url = `${import.meta.env.VITE_BASE_URL}/user/sign-in`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        console.log(response);
+
+        return response.json();
+      })
+      .then((result) => {
+        if (result.success) {
+          console.log("Successfull");
+          toast.success(result.message);
+          navigate("/home", { replace: true });
+          const user = result.data.user;
+          localStorage.setItem('auth',JSON.stringify({isAuthenticated: true,user}));
+          dispatch(signIn({ ...user }));
+        } else {
+          console.log("Error ");
+          console.log(result.message);
+          toast.error(result.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -75,7 +110,7 @@ function Login() {
             Don't have an account?{" "}
             <Button
               text="Sign Up"
-              onClick={() => navigate("/sign-up")}
+              onClick={() => navigate("/sign-up",{replace:true})}
               variant="text"
             />
           </p>

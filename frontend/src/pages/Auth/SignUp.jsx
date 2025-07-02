@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signUpSchema } from "../../utils/validators/auth";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
+import toast from "react-hot-toast";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -18,19 +19,46 @@ function SignUp() {
   } = useForm({
     resolver: zodResolver(signUpSchema),
   });
-
   const onSubmit = (data) => {
     console.log(data);
+    const url = `${import.meta.env.VITE_BASE_URL}/user/sign-up`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        console.log(response);
+
+        return response.json();
+      })
+      .then((result) => {
+        if (result.success) {
+          console.log("Successfull");
+          toast.success(result.message);
+          navigate("/sign-in", { replace: true });
+        } else {
+          console.log("Error ");
+          console.log(result.message);
+          toast.error(result.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
     <div className="flex items-center justify-center bg-darkBg px-4 mt-20">
       <div className="w-full max-w-md bg-footer-Bg/30 backdrop-blur-md border border-footer-Bg/40 rounded-2xl p-8 shadow-xl">
         <h2 className="text-3xl font-bold text-white text-center">
-          Welcome Back
+          Create Your Account
         </h2>
         <p className="text-gray-400 text-center mt-2 text-sm">
-          Sign in to your UpClass.dev account
+          Join UpClass.dev and start your teaching journey today
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
