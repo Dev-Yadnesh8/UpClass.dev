@@ -2,6 +2,7 @@ import { OfferingsCard } from "../../components/index.js";
 import { offerings } from "../../data/offerings.js";
 
 function Landing() {
+ 
   return (
     <div className=" font-poppins  flex justify-center px-4 py-12">
       <div className="w-full max-w-7xl text-white">
