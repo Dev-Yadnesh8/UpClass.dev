@@ -26,7 +26,7 @@ const userSchema = new Schema({
         ref : 'Video'
     }],
     role : {
-        type : String,
+        type :[String],
         enum : ["USER","ADMIN"],
         default : "USER"
     },

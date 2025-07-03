@@ -45,7 +45,13 @@ function Login() {
           toast.success(result.message);
           navigate("/home", { replace: true });
           const user = result.data.user;
-          localStorage.setItem('auth',JSON.stringify({isAuthenticated: true,user}));
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({ isAuthenticated: true, user })
+          );
+          localStorage.setItem("accessToken", result.data.accessToken);
+          localStorage.setItem("refreshToken", result.data.refreshToken);
+
           dispatch(signIn({ ...user }));
         } else {
           console.log("Error ");
@@ -54,7 +60,23 @@ function Login() {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error occurred when hitting API:", error);
+
+        if (error.response) {
+          // Server responded with a status outside the 2xx range
+          const message =
+            error.response.data?.message ||
+            "Something went wrong on the server.";
+          toast.error(message);
+        } else if (error.request) {
+          // Request was made but no response received
+          toast.error(
+            "No response from server. Please check your internet connection."
+          );
+        } else {
+          // Error in setting up the request
+          toast.error("Request setup failed. Try again.");
+        }
       });
   };
 
@@ -110,7 +132,7 @@ function Login() {
             Don't have an account?{" "}
             <Button
               text="Sign Up"
-              onClick={() => navigate("/sign-up",{replace:true})}
+              onClick={() => navigate("/sign-up", { replace: true })}
               variant="text"
             />
           </p>

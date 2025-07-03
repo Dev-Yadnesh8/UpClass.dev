@@ -44,7 +44,7 @@ const createCourse = asyncHandler(async (req, res) => {
 });
 
 const getAllCourses = asyncHandler(async (req, res) => {
-  const isAdmin = req.user?.role === "ADMIN";  
+  const isAdmin = req.user?.role.includes("ADMIN");  
   const filter = isAdmin ? {} : {visibility : "PUBLIC"};
   const courses = await Course.find(filter);
   res.status(200).json(new ApiResponse(200, "Courses fetched!!", courses));

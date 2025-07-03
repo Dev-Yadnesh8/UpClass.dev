@@ -6,4 +6,5 @@ import Button from "./Button/Button";
 import Input from "./Input/Input";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Loader from "./Loder/Loder";
-export { Header, Footer, Layout, OfferingsCard, Button, Input, PrivateRoute ,Loader};
+import CourseCard from "./CourseCard/CourseCard";
+export { Header, Footer, Layout, OfferingsCard, Button, Input, PrivateRoute ,Loader,CourseCard};
