@@ -11,12 +11,14 @@ export default function Home() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto my-8">
+    <div className="max-w-[120rem] mx-auto my-8 px-3.5">
       {/* Greeting */}
       <div className="mb-10 text-left">
         <h1 className="text-3xl md:text-4xl font-bold">
           Welcome
-          {user?.username ? `, ${capitalizeFirstLetter(user?.username)}` : ""}{" "}
+          {user?.username
+            ? `, ${capitalizeFirstLetter(user?.username)}`
+            : ""}{" "}
           👋
         </h1>
         <p className="text-gray-400 mt-2">
@@ -37,7 +39,7 @@ export default function Home() {
       )}
 
       {!isLoading && !error && (
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-10">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mt-10">
           {data?.map((course) => (
             <CourseCard key={course._id} course={course} onClick={() => {}} />
           ))}
