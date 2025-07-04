@@ -8,7 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Layout, PrivateRoute } from "./components/index.js";
-import { Home, Landing, Login, SignUp } from "./pages/index.js";
+import { Home, Landing, Login, MyCourses, SignUp } from "./pages/index.js";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 import App from "./App.jsx";
@@ -20,6 +20,7 @@ const router = createBrowserRouter(
       <Route path="sign-up" element={<SignUp />} />
       <Route element={<PrivateRoute />}>
         <Route path="/home" element={<Home />} />
+        <Route path="/my-courses" element={<MyCourses />} />
       </Route>
     </Route>
   )

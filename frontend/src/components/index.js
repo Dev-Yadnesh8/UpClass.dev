@@ -6,5 +6,8 @@ import Button from "./Button/Button";
 import Input from "./Input/Input";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Loader from "./Loder/Loder";
+
+import CourseWithProgressCard from "./CourseCard/CourseCardWithProgress";
 import CourseCard from "./CourseCard/CourseCard";
-export { Header, Footer, Layout, OfferingsCard, Button, Input, PrivateRoute ,Loader,CourseCard};
+
+export { Header, Footer, Layout, OfferingsCard, Button, Input, PrivateRoute ,Loader,CourseCard,CourseWithProgressCard};

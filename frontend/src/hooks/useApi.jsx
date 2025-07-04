@@ -26,7 +26,11 @@ function useApi(path) {
         }
       } catch (err) {
         console.error("GET API error:", err);
-        setError(err.message);
+        if(err.response.status == 404){
+          setData([]); // manually handling 404 to set empty list 
+        }else{
+          setError(err.response.data.message);
+        }
       } finally {
         setIsLoading(false);
       }
