@@ -30,7 +30,9 @@ function Login() {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      const response = await axiosInstance.post(SIGN_IN_ENPOINT, data);
+      const response = await axiosInstance.post(SIGN_IN_ENPOINT, data, {
+        withCredentials: true,
+      });
       const result = response.data;
       console.log("RESULT--", result);
 
@@ -52,7 +54,6 @@ function Login() {
         "We couldn’t log you in. Please verify your credentials and try again."
       );
     }
-  
   };
 
   return (

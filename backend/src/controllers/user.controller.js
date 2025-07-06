@@ -4,6 +4,7 @@ import ApiResponse from "../utils/apiResponse.js";
 import UserValidator from "../validators/user.validator.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import { cookieOptions } from "../constants.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -108,10 +109,7 @@ const signIn = asyncHandler(async (req, res) => {
   );
 
   //Step4 : Send token & response
-  const cookieOptions = {
-    httpOnly: true,
-    secure: true,
-  };
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, cookieOptions)
@@ -131,10 +129,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     { $set: { refreshToken: undefined } },
     { new: true }
   );
-  const cookieOptions = {
-    httpOnly: true,
-    secure: true,
-  };
+
   return res
     .status(200)
     .clearCookie("accessToken", cookieOptions)
@@ -143,8 +138,10 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
+  console.log(cookieOptions);
+  
   const userRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
-  console.log(userRefreshToken);
+  console.log("User Refresh Token", userRefreshToken);
   if (!userRefreshToken) {
     throw new ApiError(401, "Unauthorized request");
   }
@@ -165,10 +162,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       user._id
     );
-    const cookieOptions = {
-      httpOnly: true,
-      secure: true,
-    };
+
     return res
       .status(200)
       .cookie("accessToken", accessToken, cookieOptions)
@@ -185,15 +179,14 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 });
 
 const changePassword = asyncHandler(async (req, res) => {
-
   //Step1: Get new and old pass form user
-  const result =  UserValidator.validateChangePassword(req.body);
+  const result = UserValidator.validateChangePassword(req.body);
   if (!result.success) {
     throw new ApiError(422, "Validation failed", result.errors);
   }
-  const {newPassword,oldPassword} = result.data;
-  if(newPassword === oldPassword){
-    throw new ApiError(400,"Both passwords cannot be same");
+  const { newPassword, oldPassword } = result.data;
+  if (newPassword === oldPassword) {
+    throw new ApiError(400, "Both passwords cannot be same");
   }
 
   //Step2: Verify old password with db's password

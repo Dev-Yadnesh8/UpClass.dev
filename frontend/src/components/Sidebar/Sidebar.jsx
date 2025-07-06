@@ -1,8 +1,8 @@
-import { FiHome, FiBookOpen, FiUser, FiLogOut } from "react-icons/fi";
+import { FiHome, FiBookOpen } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setSidebarCollapsed,
   setSidebarOpen,
-  toggleSidebarCollapse,
 } from "../../features/sidebar/sidebarSlice";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
@@ -13,67 +13,79 @@ export default function Sidebar() {
     (state) => state.sidebar
   );
 
+  // Auto-toggle based on screen size
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth < 768;
-      dispatch(setSidebarOpen(!isMobile));
+      const width = window.innerWidth;
+      dispatch(setSidebarOpen(width >= 768));
+      dispatch(setSidebarCollapsed(width < 1280));
     };
 
-    handleResize(); // on mount
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [dispatch]);
 
   const collapsed = isSidebarCollapsed;
+  const isMobile = window.innerWidth < 768;
 
   return (
-    <aside
-      className={`fixed md:sticky top-0 left-0 h-full bg-darkerBg p-4 z-40 border-r border-footer-Bg
-  transform transition-all duration-300 ease-in-out
-    ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-    ${collapsed ? "w-[72px]" : "w-64"}`}
-    >
-      <nav className="flex flex-col gap-4">
-        <SidebarLink
-          icon={<FiHome size={18} />}
-          text="Home"
-          collapsed={collapsed}
-          to={"/home"}
+    <>
+      {/* Overlay on mobile when sidebar is open */}
+      {isMobile && isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-darkerBg/50 z-40 md:hidden"
+          onClick={() => dispatch(setSidebarOpen(false))}
         />
-        <SidebarLink
-          icon={<FiBookOpen size={18} />}
-          text="My Courses"
-          collapsed={collapsed}
-          to={"/my-courses"}
-        />
-      </nav>
-    </aside>
+      )}
+
+      <aside
+        className={`
+        fixed md:sticky top-20 left-0 h-[calc(100vh-5rem)]
+        z-50 bg-darkerBg border-r border-footer-Bg
+        overflow-y-auto p-4 transition-all duration-300 ease-in-out
+        ${collapsed ? "w-[72px]" : "w-64"}
+        ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }
+      `}
+      >
+        <nav className="flex flex-col gap-4">
+          <SidebarLink
+            icon={<FiHome size={18} />}
+            text="Home"
+            to="/"
+            collapsed={collapsed}
+          />
+          <SidebarLink
+            icon={<FiBookOpen size={18} />}
+            text="My Courses"
+            to="/my-courses"
+            collapsed={collapsed}
+          />
+        </nav>
+      </aside>
+    </>
   );
 }
 
-function SidebarLink({ icon, text, collapsed, to }) {
+function SidebarLink({ icon, text, to, collapsed }) {
   return (
     <div className="relative group">
       <NavLink
         to={to}
         className={({ isActive }) =>
-          `flex items-center ${
+          `flex items-center py-3 rounded-lg w-full text-left text-white transition-all ${
             collapsed ? "justify-center px-0" : "gap-3 px-3"
-          } py-3 rounded-lg transition-all w-full text-left cursor-pointer
-          ${
-            isActive
-              ? "bg-footer-Bg/50 text-white"
-              : "hover:bg-footer-Bg/30 text-white"
-          }`
+          } ${isActive ? "bg-footer-Bg/50" : "hover:bg-footer-Bg/30"}`
         }
       >
         <span className={`${collapsed ? "text-xl" : "text-base"}`}>{icon}</span>
         {!collapsed && <span>{text}</span>}
       </NavLink>
 
-      {/* Tooltip when collapsed */}
       {collapsed && (
-        <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+        <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
           {text}
         </span>
       )}

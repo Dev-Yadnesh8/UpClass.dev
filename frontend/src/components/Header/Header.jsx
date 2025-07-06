@@ -12,7 +12,7 @@ import {
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const {  user } = useSelector((state) => state.auth);
   const isSidebarCollapsed = useSelector(
     (state) => state.sidebar.isSidebarCollapsed
   );
@@ -22,7 +22,7 @@ function Header() {
       <div className="mx-auto px-6 py-7 flex items-center justify-between">
         {/* Logo + Sidebar toggles */}
         <div className="flex justify-start items-center">
-          {isAuthenticated && (
+          {user && (
             <>
               {/* Desktop toggle */}
               {isSidebarCollapsed ? (
@@ -51,7 +51,7 @@ function Header() {
         </div>
 
         {/* Auth Action */}
-        {!isAuthenticated && (
+        {!user && (
           <Button
             text={"Login"}
             variant="outline"

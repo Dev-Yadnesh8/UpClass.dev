@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 export default function handleApiError(error,endpoint,fallback = "Something went wrong"){
      const result = error?.response?.data;
       if (!result) {
