@@ -4,6 +4,7 @@ function Button({
   variant = "solid",
   onClick,
   className = "",
+  disabled = false,
 }) {
   const baseClasses =
     "px-5 py-2 rounded-full font-medium transition duration-300 cursor-pointer";
@@ -21,6 +22,7 @@ function Button({
 
   return (
     <button
+      disabled:disabled
       type={type}
       onClick={onClick && onClick}
       className={`${baseClasses} ${

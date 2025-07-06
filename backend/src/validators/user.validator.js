@@ -9,7 +9,18 @@ const passwordSchema = z
   .regex(/[@$!%*?&]/, "Password must contain at least one special character");
 
 const emailSchema = z.string().email("Please enter a valid email");
-const usernameSchema = z.string().min(3, "Username must be atleast 3 characters").max(20, "username cannot exceed 20 characters");
+const usernameSchema = z
+  .string()
+  .min(3, { message: "Username must be at least 3 characters long" })
+  .refine((val) => /^[a-zA-Z0-9_]+$/.test(val), {
+    message: "Username can only contain letters, numbers, and underscores",
+  })
+  .refine((val) => /[a-zA-Z]/.test(val), {
+    message: "Username must contain at least one letter",
+  })
+  .refine((val) => /[0-9]/.test(val), {
+    message: "Username must contain at least one number",
+  });
 
 const signUpSchema = z.object({
   username: usernameSchema,
@@ -30,8 +41,8 @@ const signInSchema = z.object({
 });
 
 const changePasswordSchema = z.object({
-    oldPassword : passwordSchema,
-    newPassword : passwordSchema
+  oldPassword: passwordSchema,
+  newPassword: passwordSchema,
 });
 
 class UserValidator {
@@ -61,8 +72,8 @@ class UserValidator {
     return { success: true, data: result.data };
   }
 
-  static validateChangePassword(data){
-        const result = changePasswordSchema.safeParse(data);
+  static validateChangePassword(data) {
+    const result = changePasswordSchema.safeParse(data);
     if (!result.success) {
       const errors = result.error.errors.reduce((acc, err) => {
         const field = err.path[0];

@@ -6,7 +6,6 @@ const userSchema = new Schema({
     username : {
         type : String,
         required : true,
-        lowercase : true,
         minLength : [3,"Username must be greater than 3 characters"],
         maxLength : [20,"Username cannot exceed 20 characters"]
     },

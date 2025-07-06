@@ -9,10 +9,20 @@ const passwordSchema = z
   .regex(/[@$!%*?&]/, "At least one special character");
 
 const emailSchema = z.string().email("Enter a valid email");
+
 const usernameSchema = z
   .string()
-  .min(3, "Minimum 3 characters")
-  .max(20, "Maximum 20 characters");
+  .min(3, { message: "Username must be at least 3 characters long" })
+  .refine((val) => /^[a-zA-Z0-9_]+$/.test(val), {
+    message: "Username can only contain letters, numbers, and underscores",
+  })
+  .refine((val) => /[a-zA-Z]/.test(val), {
+    message: "Username must contain at least one letter",
+  })
+  .refine((val) => /[0-9]/.test(val), {
+    message: "Username must contain at least one number",
+  });
+
 
 export const signInSchema = z.object({
   identifier: z

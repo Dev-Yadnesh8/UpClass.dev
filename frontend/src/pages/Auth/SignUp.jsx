@@ -1,54 +1,49 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button, Input } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signUpSchema } from "../../utils/validators/auth";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import toast from "react-hot-toast";
+import { axiosInstance, SIGN_UP_ENPOINT } from "../../utils/api";
 
 function SignUp() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(signUpSchema),
-  });
-  const onSubmit = (data) => {
+  } = useForm({ resolver: zodResolver(signUpSchema) });
+
+  const onSubmit = async (data) => {
     console.log(data);
-    const url = `${import.meta.env.VITE_BASE_URL}/user/sign-up`;
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        console.log(response);
-
-        return response.json();
-      })
-      .then((result) => {
-        if (result.success) {
-          console.log("Successfull");
-          toast.success(result.message);
-          navigate("/sign-in", { replace: true });
-        } else {
-          console.log("Error ");
-          console.log(result.message);
-          toast.error(result.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    try {
+      setIsLoading(true);
+      const response = await axiosInstance.post(SIGN_UP_ENPOINT, data);
+      const result = response.data;
+      if (!result.success) {
+        console.log("ERROR-IN-SIGN_UP", result.message);
+        toast.error(result.message);
+      } else {
+        toast.success(result.message);
+        navigate("/sign-in", { replace: true });
+      }
+    } catch (error) {
+      const result = error?.response?.data;
+      if (!result) {
+        console.error("Server connection failed");
+        toast.error("Unable to connect to server. Please try again later.");
+      } else {
+        console.error("ERROR-HITTING-SIGN_UP", error);
+        toast.error(result.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -101,7 +96,12 @@ function SignUp() {
             }
           />
 
-          <Button className="w-full" text="Create Account" type="submit" />
+          <Button
+            className="w-full"
+            text={isLoading ? "Creating Account..." : "Create Account"}
+            type="submit"
+            disabled={isLoading}
+          />
 
           <p className="text-sm text-gray-400 text-center mt-4 ">
             Already have an account?{" "}
