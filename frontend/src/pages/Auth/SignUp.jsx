@@ -7,6 +7,7 @@ import { signUpSchema } from "../../utils/validators/auth";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import toast from "react-hot-toast";
 import { axiosInstance, SIGN_UP_ENPOINT } from "../../utils/api";
+import handleApiError from "../../utils/helper/handle_api_error";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -33,14 +34,7 @@ function SignUp() {
         navigate("/sign-in", { replace: true });
       }
     } catch (error) {
-      const result = error?.response?.data;
-      if (!result) {
-        console.error("Server connection failed");
-        toast.error("Unable to connect to server. Please try again later.");
-      } else {
-        console.error("ERROR-HITTING-SIGN_UP", error);
-        toast.error(result.message);
-      }
+      handleApiError(error, SIGN_UP_ENPOINT, "Failed to create account");
     } finally {
       setIsLoading(false);
     }

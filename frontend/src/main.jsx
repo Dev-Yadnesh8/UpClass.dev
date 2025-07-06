@@ -8,20 +8,26 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Layout, PrivateRoute } from "./components/index.js";
-import { Home, Landing, Login, MyCourses, SignUp } from "./pages/index.js";
+import { Login, MyCourses, NotFound, SignUp } from "./pages/index.js";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
-import App from "./App.jsx";
+import AuthRedirect from "./components/PrivateRoute/AuthRedirect.jsx";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route path="" element={<Landing />} />
+      {/* PUBLIC ROUTES */}
+      <Route index element={<AuthRedirect />} />
       <Route path="sign-in" element={<Login />} />
       <Route path="sign-up" element={<SignUp />} />
+
+      {/* PRIVATE ROUTES */}
       <Route element={<PrivateRoute />}>
-        <Route path="/home" element={<Home />} />
-        <Route path="/my-courses" element={<MyCourses />} />
+        <Route path="my-courses" element={<MyCourses />} />
       </Route>
+
+      {/* CATCH-ALL */}
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
@@ -29,9 +35,7 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <App>
-        <RouterProvider router={router} />
-      </App>
+      <RouterProvider router={router} />
     </Provider>
   </StrictMode>
 );

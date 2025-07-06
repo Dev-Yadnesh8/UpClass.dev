@@ -2,16 +2,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Input } from "../../components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signInSchema } from "../../utils/validators/auth";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../features/auth/authSlice";
+import { axiosInstance, SIGN_IN_ENPOINT } from "../../utils/api";
+import handleApiError from "../../utils/helper/handle_api_error";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const form = location.state?.form?.pathname || "/";
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 
@@ -23,61 +27,32 @@ function Login() {
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    const url = `${import.meta.env.VITE_BASE_URL}/user/sign-in`;
+    try {
+      const response = await axiosInstance.post(SIGN_IN_ENPOINT, data);
+      const result = response.data;
+      console.log("RESULT--", result);
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        console.log(response);
+      if (!result.success) {
+        toast.error(result.message);
+      } else {
+        toast.success(result.message);
+        dispatch(
+          signIn({ ...result.data.user, accessToken: result.data.accessToken })
+        );
+        console.log("FROM", form);
 
-        return response.json();
-      })
-      .then((result) => {
-        if (result.success) {
-          console.log("Successfull");
-          toast.success(result.message);
-          navigate("/home", { replace: true });
-          const user = result.data.user;
-          localStorage.setItem(
-            "auth",
-            JSON.stringify({ isAuthenticated: true, user })
-          );
-          localStorage.setItem("accessToken", result.data.accessToken);
-          localStorage.setItem("refreshToken", result.data.refreshToken);
-
-          dispatch(signIn({ ...user }));
-        } else {
-          console.log("Error ");
-          console.log(result.message);
-          toast.error(result.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error occurred when hitting API:", error);
-
-        if (error.response) {
-          // Server responded with a status outside the 2xx range
-          const message =
-            error.response.data?.message ||
-            "Something went wrong on the server.";
-          toast.error(message);
-        } else if (error.request) {
-          // Request was made but no response received
-          toast.error(
-            "No response from server. Please check your internet connection."
-          );
-        } else {
-          // Error in setting up the request
-          toast.error("Request setup failed. Try again.");
-        }
-      });
+        navigate(form, { replace: true });
+      }
+    } catch (error) {
+      handleApiError(
+        error,
+        SIGN_IN_ENPOINT,
+        "We couldn’t log you in. Please verify your credentials and try again."
+      );
+    }
+  
   };
 
   return (
