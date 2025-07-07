@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -8,11 +8,15 @@ import {
   toggleSidebarCollapse,
   toggleSidebarOpen,
 } from "../../features/sidebar/sidebarSlice";
+import useLogout from "../../hooks/useLogout";
+import { FiLogOut } from "react-icons/fi";
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {  user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const logout = useLogout();
+  const location = useLocation();
   const isSidebarCollapsed = useSelector(
     (state) => state.sidebar.isSidebarCollapsed
   );
@@ -51,11 +55,23 @@ function Header() {
         </div>
 
         {/* Auth Action */}
-        {!user && (
+        {!user ? (
           <Button
             text={"Login"}
             variant="outline"
-            onClick={() => navigate("/sign-in")}
+            onClick={() => navigate("/sign-in", { state: { from: location } })}
+          />
+        ) : (
+          <Button
+            text={<FiLogOut/>}
+            variant="outline"
+            onClick={() => {
+              logout();
+              navigate("/sign-in", {
+                replace: true,
+                state: { from: location }
+              });
+            }}
           />
         )}
       </div>

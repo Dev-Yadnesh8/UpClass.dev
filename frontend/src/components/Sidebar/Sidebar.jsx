@@ -1,4 +1,4 @@
-import { FiHome, FiBookOpen } from "react-icons/fi";
+import { FiHome, FiBookOpen, FiLogOut } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setSidebarCollapsed,
@@ -63,6 +63,7 @@ export default function Sidebar() {
             to="/my-courses"
             collapsed={collapsed}
           />
+
         </nav>
       </aside>
     </>

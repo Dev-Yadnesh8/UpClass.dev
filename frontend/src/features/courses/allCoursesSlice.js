@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    courses : []
+    courses : [],
+    status: 'IDLE', // 'IDLE' , 'LOADING','SUCCESS','FAILED'
+    error: null
 }
 
 export const allCoursesSlice = createSlice({

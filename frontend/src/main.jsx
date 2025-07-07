@@ -7,7 +7,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { Layout, PrivateRoute } from "./components/index.js";
+import { AuthGate, Layout, PrivateRoute } from "./components/index.js";
 import { Login, MyCourses, NotFound, SignUp } from "./pages/index.js";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
@@ -22,8 +22,10 @@ const router = createBrowserRouter(
       <Route path="sign-up" element={<SignUp />} />
 
       {/* PRIVATE ROUTES */}
-      <Route element={<PrivateRoute />}>
-        <Route path="my-courses" element={<MyCourses />} />
+      <Route element={<AuthGate />}>
+        <Route element={<PrivateRoute />}>
+          <Route path="my-courses" element={<MyCourses />} />
+        </Route>
       </Route>
 
       {/* CATCH-ALL */}
