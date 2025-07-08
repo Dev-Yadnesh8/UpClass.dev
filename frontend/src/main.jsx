@@ -17,12 +17,13 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       {/* PUBLIC ROUTES */}
-      <Route index element={<AuthRedirect />} />
+      
       <Route path="sign-in" element={<Login />} />
       <Route path="sign-up" element={<SignUp />} />
 
       {/* PRIVATE ROUTES */}
       <Route element={<AuthGate />}>
+      <Route index element={<AuthRedirect />} />
         <Route element={<PrivateRoute />}>
           <Route path="my-courses" element={<MyCourses />} />
         </Route>
