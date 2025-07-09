@@ -9,11 +9,13 @@ import {
 } from "react-router-dom";
 import { AuthGate, Layout, PrivateRoute } from "./components/index.js";
 import {
+  CourseContent,
   CourseDetails,
   Login,
   MyCourses,
   NotFound,
   SignUp,
+  VideoPlayerPage,
 } from "./pages/index.js";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
@@ -32,7 +34,9 @@ const router = createBrowserRouter(
 
         <Route index element={<AuthRedirect />} />
         <Route element={<PrivateRoute />}>
-          <Route path="my-courses" element={<MyCourses />} />
+          <Route path="courses" element={<MyCourses />} />
+          <Route path="courses/:id" element={<CourseContent />} />
+          <Route path="courses/:courseId/video/:id" element={<VideoPlayerPage />} />
           <Route path="course-details/:id" element={<CourseDetails />} />
         </Route>
 

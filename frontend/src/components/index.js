@@ -10,6 +10,7 @@ import AuthGate from "./PrivateRoute/AuthGate";
 import FullPageLoader from "./Loader/FullPageLoader";
 import CourseWithProgressCard from "./CourseCard/CourseCardWithProgress";
 import CourseCard from "./CourseCard/CourseCard";
+import CourseVideoCard from "./CourseVideoCard/CourseVideoCard";
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   CourseWithProgressCard,
   AuthGate,
   FullPageLoader,
+  CourseVideoCard,
 };

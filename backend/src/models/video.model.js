@@ -1,9 +1,10 @@
 import mongoose , {Schema} from "mongoose";
+import { required } from "zod/v4-mini";
 
 const videoSchema = new Schema({
     title : {
         type: String,
-        require : true,
+        required : true,
         index:true,
     },
     publicId : {

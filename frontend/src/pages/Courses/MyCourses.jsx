@@ -6,6 +6,8 @@ import { PURCHASED_COURSES_ENPOINT } from "../../utils/api/api_enpoints";
 function MyCourses() {
   const navigate = useNavigate();
   const { isLoading, data, error } = useApi(PURCHASED_COURSES_ENPOINT);
+  console.log(data);
+
   return (
     <div className="max-w-[120rem] mx-auto my-8 px-3.5">
       {/* Greeting */}
@@ -42,7 +44,7 @@ function MyCourses() {
             <CourseWithProgressCard
               key={course._id}
               course={course}
-              onClick={() => {}}
+              onClick={() => navigate(`${course.courseId}`)}
             />
           ))}
         </div>

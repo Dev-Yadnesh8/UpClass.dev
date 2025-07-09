@@ -4,14 +4,11 @@ import { CourseCard } from "../../components";
 import { capitalizeFirstLetter } from "../../utils/formatter/formatter";
 import useApi from "../../hooks/useApi";
 import { ALL_COURSES_ENPOINT } from "../../utils/api/api_enpoints";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { user, loading } = useSelector((state) => state.auth);
-  console.log("User", {...user} ,"Loading ",loading);
-  console.log(
-    "User Capital",
-    `${capitalizeFirstLetter(user?.username ?? "guest")}`
-  );
+  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const { isLoading, data, error } = useApi(ALL_COURSES_ENPOINT);
 
@@ -48,7 +45,11 @@ export default function Home() {
       {!isLoading && !error && (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mt-10">
           {data?.map((course) => (
-            <CourseCard key={course._id} course={course} onClick={() => {}} />
+            <CourseCard
+              key={course._id}
+              course={course}
+              onClick={() => navigate(`course-details/${course._id}`)}
+            />
           ))}
         </div>
       )}

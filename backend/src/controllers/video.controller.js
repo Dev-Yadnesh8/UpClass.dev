@@ -177,7 +177,7 @@ const markVideoAsWatch = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, `${hasWatched? "Video marked as watched successfully" :"Video marked as unwatched successfully"}`));
 });
 
-const getVideos = asyncHandler(async (req, res) => {
+const getVideoSummary = asyncHandler(async (req, res) => {
   //Step1: Get courseID and validate it
   const { courseId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(courseId)) {
@@ -190,11 +190,28 @@ const getVideos = asyncHandler(async (req, res) => {
   }
   //Step2: Fetch all videos and send response
   const videos = await Video.find({ courseId }).select(
-    "-comments -likes -dislikes"
+    "-comments -likes -dislikes -videoFile -publicId"
   );
   res
     .status(200)
     .json(new ApiResponse(200, "Videos fetched successfully", videos));
 });
 
-export { postVideo, deleteVideo, editVideo, getVideos,markVideoAsWatch };
+const getVideoById= asyncHandler(async (req, res) => {
+  //Step1: Get courseID and validate it
+  const { videoId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(videoId)) {
+    throw new ApiError(400, "Invalid Video ID format");
+  }
+  
+  //Step2: Fetch all videos and send response
+  const video = await Video.findById(videoId).select(
+    " -publicId"
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Video fetched successfully", video));
+});
+
+export { postVideo, deleteVideo, editVideo, getVideoSummary ,markVideoAsWatch ,getVideoById};

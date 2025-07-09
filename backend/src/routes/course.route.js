@@ -22,6 +22,6 @@ router.route("/:id").get(verifyJWT, getCourseById);
 router.route("/:courseId/progress").get(verifyJWT, getCourseProgress);
 
 // Nested route
-router.use("/:courseId/videos", verifyJWT, checkIsAdmin, videoRouter);
+router.use("/:courseId/videos", verifyJWT, videoRouter);
 
 export default router;

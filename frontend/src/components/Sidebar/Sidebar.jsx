@@ -60,7 +60,7 @@ export default function Sidebar() {
           <SidebarLink
             icon={<FiBookOpen size={18} />}
             text="My Courses"
-            to="/my-courses"
+            to="/courses"
             collapsed={collapsed}
           />
 
