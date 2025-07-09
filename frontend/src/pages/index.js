@@ -2,7 +2,8 @@ import Landing from "./Landing/Landing";
 import SignUp from "./Auth/SignUp";
 import Login from "./Auth/Login";
 import Home from "./Home/Home";
-import MyCourses from "./MyCourses/MyCourses";
+import MyCourses from "./Courses/MyCourses";
 import NotFound from "./NotFound/NotFound";
+import CourseDetails from "./Courses/CourseDetails";
 
-export { Landing, Login, SignUp,Home,MyCourses,NotFound };
+export { Landing, Login, SignUp, Home, MyCourses, NotFound, CourseDetails };

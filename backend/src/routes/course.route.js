@@ -3,6 +3,7 @@ import {
   createCourse,
   editCourse,
   getAllCourses,
+  getCourseById,
 } from "../controllers/course.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import videoRouter from "../routes/video.route.js";
@@ -17,6 +18,7 @@ router
   .route("/edit/:courseId")
   .patch(verifyJWT, checkIsAdmin, upload.single("thumbnail"), editCourse);
 router.route("/").get(verifyJWT, getAllCourses);
+router.route("/:id").get(verifyJWT, getCourseById);
 router.route("/:courseId/progress").get(verifyJWT, getCourseProgress);
 
 // Nested route

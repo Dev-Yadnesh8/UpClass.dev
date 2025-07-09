@@ -6,7 +6,9 @@ import Sidebar from "../Sidebar/Sidebar";
 import { useSelector } from "react-redux";
 
 function Layout() {
-  const { user } = useSelector((state) => state.auth);
+  const { user ,loading} = useSelector((state) => state.auth);
+
+  if(loading) return <p>Auth CHECKING...</p>
   return (
     <div className="min-h-screen flex flex-col bg-darkBg text-white">
       <Header />

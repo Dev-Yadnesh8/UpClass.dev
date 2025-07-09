@@ -3,6 +3,8 @@ import { z } from "zod";
 const courseSchema = z.object({
   title: z.string().trim().min(3).max(50),
   description: z.string().trim(),
+  whatYouWillLearnHtml: z.string(),
+  prerequisitesHtml: z.string(),
   price: z.coerce.number().min(0, "Price must be a positive number"),
 });
 

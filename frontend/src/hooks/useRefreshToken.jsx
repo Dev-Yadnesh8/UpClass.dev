@@ -6,15 +6,26 @@ import { signIn } from "../features/auth/authSlice";
 
 function useRefreshToken() {
   const { user } = useSelector((state) => state.auth);
+  console.log("REFRESH TOKEN HOOK USER", { ...user });
+
   const dispatch = useDispatch();
   const refresh = async () => {
     try {
-      const response = await axiosInstance.post(REFRESH_TOKEN_ENPOINT, {}, {
-        withCredentials: true,
-      });
-       const result = response?.data;
+      const response = await axiosInstance.post(
+        REFRESH_TOKEN_ENPOINT,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      const result = response?.data;
       console.log("RESPONSE", response);
-      dispatch(signIn({ ...user, accessToken: result?.data?.accessToken }));
+      dispatch(
+        signIn({
+          ...result?.data?.user,
+          accessToken: result?.data?.accessToken,
+        })
+      );
       return result?.data?.accessToken;
     } catch (error) {
       console.log("ERROR UPDATING TOKEN", error);

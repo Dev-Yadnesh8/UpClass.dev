@@ -1,7 +1,9 @@
 // BaseCourseCard.jsx
+import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 
 export default function BaseCourseCard({ course, onClick, children }) {
+  const navigate = useNavigate();
   return (
     <div className="bg-darkBg rounded-xl border border-footer-Bg overflow-hidden flex flex-col">
       {/* Thumbnail */}
@@ -28,15 +30,13 @@ export default function BaseCourseCard({ course, onClick, children }) {
         {/* Slot for extra components like progress */}
         {children}
 
-        
-
         {/* CTA Button */}
         <div className="mt-2 w-full">
           <Button
             text="View Course"
             variant="filled"
             className="w-full"
-            onClick={() => onClick(course._id)}
+            onClick={() => onClick(navigate(`course-details/${course._id}`))}
           />
         </div>
       </div>

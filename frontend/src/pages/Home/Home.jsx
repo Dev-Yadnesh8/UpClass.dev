@@ -6,7 +6,12 @@ import useApi from "../../hooks/useApi";
 import { ALL_COURSES_ENPOINT } from "../../utils/api/api_enpoints";
 
 export default function Home() {
-  const { user } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
+  console.log("User", {...user} ,"Loading ",loading);
+  console.log(
+    "User Capital",
+    `${capitalizeFirstLetter(user?.username ?? "guest")}`
+  );
 
   const { isLoading, data, error } = useApi(ALL_COURSES_ENPOINT);
 
@@ -18,7 +23,7 @@ export default function Home() {
           Welcome
           {user?.username
             ? `, ${capitalizeFirstLetter(user?.username)}`
-            : ""}{" "}
+            : " Guest User"}{" "}
           👋
         </h1>
         <p className="text-gray-400 mt-2">
@@ -28,7 +33,9 @@ export default function Home() {
 
       {/* States */}
       {isLoading && (
-        <div className="text-center text-purple text-xl">Loading...</div>
+        <div className="text-center text-purple text-xl">
+          Loading Courses...
+        </div>
       )}
 
       {error && <div className="text-center text-red-400 text-lg">{error}</div>}

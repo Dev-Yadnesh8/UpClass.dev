@@ -5,10 +5,23 @@ import OfferingsCard from "./Offerings_card/Offerings_card";
 import Button from "./Button/Button";
 import Input from "./Input/Input";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
-import Loader from "./Loder/Loder";
+import Loader from "./Loader/Loder";
 import AuthGate from "./PrivateRoute/AuthGate";
-
+import FullPageLoader from "./Loader/FullPageLoader";
 import CourseWithProgressCard from "./CourseCard/CourseCardWithProgress";
 import CourseCard from "./CourseCard/CourseCard";
 
-export { Header, Footer, Layout, OfferingsCard, Button, Input, PrivateRoute ,Loader,CourseCard,CourseWithProgressCard,AuthGate};
+export {
+  Header,
+  Footer,
+  Layout,
+  OfferingsCard,
+  Button,
+  Input,
+  PrivateRoute,
+  Loader,
+  CourseCard,
+  CourseWithProgressCard,
+  AuthGate,
+  FullPageLoader,
+};

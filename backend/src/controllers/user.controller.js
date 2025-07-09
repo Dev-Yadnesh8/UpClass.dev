@@ -139,7 +139,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
   console.log(cookieOptions);
-  
+
   const userRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
   console.log("User Refresh Token", userRefreshToken);
   if (!userRefreshToken) {
@@ -162,6 +162,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       user._id
     );
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
 
     return res
       .status(200)
@@ -169,6 +172,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .cookie("refreshToken", refreshToken, cookieOptions)
       .json(
         new ApiResponse(200, "Tokens refreshed successfully", {
+          user: loggedInUser,
+
           accessToken,
           refreshToken,
         })

@@ -26,12 +26,14 @@ const createCourse = asyncHandler(async (req, res) => {
     );
   }
 
-  const { title, description, price } = result.data;
+  const { title, description, price,prerequisitesHtml,whatYouWillLearnHtml } = result.data;
   const { secure_url, public_id }  = cloudinaryThumbnail;
   //Step2: create the course entry in DB
   const createdCourse = await Course.create({
     title,
     description,
+    prerequisitesHtml,
+    whatYouWillLearnHtml,
     thumbnail: secure_url,
     thumbnailPublicId: public_id,
     price,
@@ -48,6 +50,15 @@ const getAllCourses = asyncHandler(async (req, res) => {
   const filter = isAdmin ? {} : {visibility : "PUBLIC"};
   const courses = await Course.find(filter);
   res.status(200).json(new ApiResponse(200, "Courses fetched!!", courses));
+});
+
+const getCourseById = asyncHandler(async (req, res) => {
+ 
+  const course = await Course.findById(req.params.id);
+  if(!course){
+    throw new ApiError(404,"Course not found or invalid id");
+  }
+  res.status(200).json(new ApiResponse(200, "Course fetched!!", course));
 });
 
 const editCourse = asyncHandler(async (req, res) => {
@@ -101,4 +112,4 @@ const editCourse = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, "Course updated successfully", updatedCourse));
 });
 
-export { createCourse, getAllCourses, editCourse };
+export { createCourse, getAllCourses, editCourse ,getCourseById};
