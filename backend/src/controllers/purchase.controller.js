@@ -16,7 +16,13 @@ const purchaseCourse = asyncHandler(async(req,res)=>{
     if(!course){
         throw new ApiError(404,"Course not found");
     }
-    //Step3: Create an entry in purchases schema.
+
+    //Step3: Check if user already had purchased the course
+    const isAlreadyPurchased = await Purchase.findOne({courseId});
+    if(isAlreadyPurchased){
+        throw new ApiError(409,"You have already purchased this course");
+    }
+    //Step4: Create an entry in purchases schema.
     const purchase = await Purchase.create({
         userId: req.user._id,
         courseId
@@ -24,7 +30,7 @@ const purchaseCourse = asyncHandler(async(req,res)=>{
     if(!purchase){
         throw new ApiError(500,"Failed to create purchase");
     }
-    //Step4: Send successful response.
+    //Step5: Send successful response.
     return res.status(201).json(new ApiResponse(201,"Course purchased succefful"));
 });
 

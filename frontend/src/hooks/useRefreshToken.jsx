@@ -5,9 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../features/auth/authSlice";
 
 function useRefreshToken() {
-  const { user } = useSelector((state) => state.auth);
-  console.log("REFRESH TOKEN HOOK USER", { ...user });
-
   const dispatch = useDispatch();
   const refresh = async () => {
     try {
@@ -19,7 +16,7 @@ function useRefreshToken() {
         }
       );
       const result = response?.data;
-      console.log("RESPONSE", response);
+      // console.log("RESPONSE", response);
       dispatch(
         signIn({
           ...result?.data?.user,
