@@ -148,25 +148,30 @@ const editVideo = asyncHandler(async (req, res) => {
 const markVideoAsWatch = asyncHandler(async (req, res) => {
   //Step1: Get video id and validate it
   const { videoId } = req.params;
+  const userId = req.user._id;
   if (!videoId || !mongoose.Types.ObjectId.isValid(videoId)) {
     throw new ApiError(400, "Invalid video ID.");
   }
 
   //Step2: Update the video model
   const video = await Video.findById(videoId);
+  console.log("Video Obj",video);
+  
   if (!video) {
     throw new ApiError(404, "Video not found");
   }
-  const hasWatched = video.watchedBy.includes(userId);
+  const hasWatched = video.isWatched.includes(userId);
+  console.log("Has watched",hasWatched);
+  
 
   if (hasWatched) {
     // Remove user ID (unwatch)
-    video.watchedBy = video.watchedBy.filter(
+    video.isWatched = video.isWatched.filter(
       (id) => id.toString() !== userId.toString()
     );
   } else {
     // Add user ID (mark as watched)
-    video.watchedBy.push(userId);
+    video.isWatched.push(userId);
   }
 
   await video.save();
@@ -174,7 +179,7 @@ const markVideoAsWatch = asyncHandler(async (req, res) => {
   //Step3: Send successful response
   return res
     .status(201)
-    .json(new ApiResponse(201, `${hasWatched? "Video marked as watched successfully" :"Video marked as unwatched successfully"}`));
+    .json(new ApiResponse(201, `${!hasWatched? "Video marked as watched successfully" :"Video marked as unwatched successfully"}`));
 });
 
 const getVideoSummary = asyncHandler(async (req, res) => {

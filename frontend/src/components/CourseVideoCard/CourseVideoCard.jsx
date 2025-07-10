@@ -2,9 +2,14 @@
 import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { formatDuration } from "../../utils/formatter/formatter";
+import { useSelector } from "react-redux";
 
 function CourseVideoCard({ video }) {
   const navigate = useNavigate();
+  const {user} = useSelector((state)=>state.auth);
+  
+  console.log("Video in Course video summary card",video);
+  
 
   return (
     <div
@@ -30,7 +35,7 @@ function CourseVideoCard({ video }) {
       </div>
 
       {/* Watched Check Icon */}
-      {video.isWatched.length > 0 && (
+      {video.isWatched.length > 0 && video.isWatched.includes(user._id) && (
         <FaCheckCircle className="absolute top-2 right-2 text-green-400 text-lg bg-black rounded-full" />
       )}
 

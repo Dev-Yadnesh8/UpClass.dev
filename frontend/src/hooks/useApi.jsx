@@ -5,15 +5,16 @@ function useApi(path) {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const axiosPrivate = useAxiosPrivateInstance()
+  const axiosPrivate = useAxiosPrivateInstance();
 
   useEffect(() => {
     if (!path) return;
-
+    
 
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         const response = await axiosPrivate.get(path);
 
         if (response.data?.success) {
@@ -23,9 +24,9 @@ function useApi(path) {
         }
       } catch (err) {
         console.error("GET API error:", err);
-        if(err.response.status == 404){
-          setData([]); // manually handling 404 to set empty list 
-        }else{
+        if (err.response.status == 404) {
+          setData([]); // manually handling 404 to set empty list
+        } else {
           setError(err.response.data.message);
         }
       } finally {
