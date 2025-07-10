@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 
 const purchaseCourse = asyncHandler(async(req,res)=>{
     //Step1: Get & validate courseId.
+    const userId = req.user._id;
     const {courseId} = req.params;
     if(!mongoose.Types.ObjectId.isValid(courseId)){
         throw new ApiError(400,"Invalid course ID");
@@ -18,7 +19,7 @@ const purchaseCourse = asyncHandler(async(req,res)=>{
     }
 
     //Step3: Check if user already had purchased the course
-    const isAlreadyPurchased = await Purchase.findOne({courseId});
+    const isAlreadyPurchased = await Purchase.findOne({courseId,userId});
     if(isAlreadyPurchased){
         throw new ApiError(409,"You have already purchased this course");
     }

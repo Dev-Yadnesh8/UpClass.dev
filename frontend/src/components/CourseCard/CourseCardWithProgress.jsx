@@ -1,7 +1,7 @@
 import BaseCourseCard from "./BaseCourseCard";
 
-export default function CourseWithProgressCard({ course, onClick }) {
-  const progress = course?.progress ?? 0;
+export default function CourseWithProgressCard({ course,progress, onClick }) {
+
 
   return (
     <BaseCourseCard course={course} onClick={onClick}>
@@ -12,7 +12,7 @@ export default function CourseWithProgressCard({ course, onClick }) {
         </div>
         <div className="w-full h-2 bg-footer-Bg rounded-full overflow-hidden">
           <div
-            className="bg-purple h-full transition-all duration-300"
+            className="bg-gradient-to-r from-blue to-purple h-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           ></div>
         </div>

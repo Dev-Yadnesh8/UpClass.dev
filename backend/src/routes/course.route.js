@@ -17,9 +17,9 @@ router
 router
   .route("/edit/:courseId")
   .patch(verifyJWT, checkIsAdmin, upload.single("thumbnail"), editCourse);
+  router.route("/progress").get(verifyJWT, getCourseProgress);
 router.route("/").get(verifyJWT, getAllCourses);
 router.route("/:id").get(verifyJWT, getCourseById);
-router.route("/:courseId/progress").get(verifyJWT, getCourseProgress);
 
 // Nested route
 router.use("/:courseId/videos", verifyJWT, videoRouter);
