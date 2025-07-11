@@ -6,7 +6,7 @@ import { axiosPrivateInstance } from "../../utils/api/axios";
 import { COMMENTS_ENPOINT } from "../../utils/api/api_enpoints";
 import toast from "react-hot-toast";
 
-function CommentsForm({ videoId }) {
+function CommentsForm({ videoId ,setComments }) {
   const { register, handleSubmit, watch, reset } = useForm();
   const commentValue = watch("commentText");
 
@@ -23,6 +23,8 @@ function CommentsForm({ videoId }) {
       }
       console.log("Adding comment result", result);
       toast.success(result.message);
+      setComments((prev)=>[...prev,result?.data]);
+      reset()
     } catch (error) {
       console.error("Error adding comment", error);
     }

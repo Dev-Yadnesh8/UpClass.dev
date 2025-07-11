@@ -4,7 +4,8 @@ import { Video } from "../models/video.model.js";
 import ApiError from "../utils/apiError.js";
 import ApiResponse from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { ObjectId } from 'bson';
+import { ObjectId } from "bson";
+import { User } from "../models/user.model.js";
 const addComment = asyncHandler(async (req, res) => {
   //Step1: Get the video id and find video in db.
   const { videoId } = req.params;
@@ -24,9 +25,21 @@ const addComment = asyncHandler(async (req, res) => {
     videoId: videoId,
   });
 
+  //Step3: get userinfo for comment
+  const user = await User.findById(req.user?._id).select("username email");
+
+  const commentData = {
+    _id: comment._id,
+    comment: comment.comment,
+    updatedAt: comment.updatedAt,
+    commentedBy: comment.commentedBy,
+    username: user.username,
+    email: user.email,
+  };
+
   return res
     .status(200)
-    .json(new ApiResponse(200, "Comment successful", comment));
+    .json(new ApiResponse(200, "Comment successful", commentData));
 });
 
 const editComment = asyncHandler(async (req, res) => {
@@ -76,36 +89,34 @@ const fetchAllComments = asyncHandler(async (req, res) => {
   }
   //Step2: Send all comments of that video
   // const allComments = await Comment.find({ videoId });
-  console.log("Video found",video);
-  
+  console.log("Video found", video);
 
-const allComments = await Comment.aggregate([
+  const allComments = await Comment.aggregate([
     {
-      $match:{videoId :new ObjectId(String(videoId))}
-    },{
-      $lookup:{
-        from: 'users',
-        localField:'commentedBy',
-        foreignField:'_id',
-        as:'commenterInfo'
-      }
-    },{
-      $unwind: '$commenterInfo'
+      $match: { videoId: new ObjectId(String(videoId)) },
     },
     {
-      $project:{
-        _id:1,
-        comment:1,
-        commentedBy:1,
-        updatedAt:1,
-        username:'$commenterInfo.username',
-        email:'$commenterInfo.email'
-
-      }
-    }
-    
-
-  ])
+      $lookup: {
+        from: "users",
+        localField: "commentedBy",
+        foreignField: "_id",
+        as: "commenterInfo",
+      },
+    },
+    {
+      $unwind: "$commenterInfo",
+    },
+    {
+      $project: {
+        _id: 1,
+        comment: 1,
+        commentedBy: 1,
+        updatedAt: 1,
+        username: "$commenterInfo.username",
+        email: "$commenterInfo.email",
+      },
+    },
+  ]);
   if (!allComments) {
     throw new ApiError(404, "No comments found");
   }

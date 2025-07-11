@@ -48,6 +48,7 @@ function VideoPlayerPage() {
         return toast.error("Failed to delete comment.");
       }
       toast.success(result?.message);
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
     } catch (error) {
       console.error(error);
     }
@@ -57,6 +58,7 @@ function VideoPlayerPage() {
     /* FETCH COMMENTS */
   }
   useEffect(() => {
+    if(!data?._id) return;
     (async () => {
       try {
         setIsCommentLoading(true);
@@ -121,7 +123,7 @@ function VideoPlayerPage() {
         <p className="text-sm text-white/60">Loading comments...</p>
       )}
 
-      <CommentsForm videoId={data?._id} />
+      <CommentsForm videoId={data?._id} setComments={setComments}/>
 
       <div className="mt-30 space-y-4">
         {comments?.length > 0 ? (
