@@ -4,11 +4,17 @@ import {
   ALL_COURSES_ENPOINT,
   COMMENTS_ENPOINT,
 } from "../../utils/api/api_enpoints";
-import { Button, CommentCard, CommentsForm } from "../../components";
+import {
+  Button,
+  CommentCard,
+  CommentsForm,
+  IconButton,
+} from "../../components";
 import { axiosPrivateInstance } from "../../utils/api/axios";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { FaCheckCircle, FaCheckSquare, FaRegCircle, FaRegSquare } from "react-icons/fa";
 
 function VideoPlayerPage() {
   const { courseId, id } = useParams();
@@ -138,11 +144,18 @@ function VideoPlayerPage() {
       />
       <span className="flex justify-between items-center mb-2.5">
         <h1 className="text-2xl font-bold mb-4">{data?.title}</h1>
-        <Button
-          text={isWatchedByUser ? "Unmark as watched" : "Mark as watched"}
-          variant="outline"
+        <IconButton
+          icon={
+            isWatchedByUser ? (
+              <FaCheckSquare className="text-deep-blue" />
+            ) : (
+              <FaRegSquare className="text-white/60" />
+            )
+          }
           onClick={markVideoAsComplete}
+          tooltip={isWatchedByUser ? "Unmark as watched" : "Mark as watched"}
         />
+       
       </span>
 
       {/* Comments Section */}

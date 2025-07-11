@@ -1,6 +1,7 @@
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import Button from "../Button/Button";
 import Avatar from "../Avatar/Avatar";
+import IconButton from "../Button/IconButton";
 
 function CommentCard({
   comment,
@@ -32,20 +33,23 @@ function CommentCard({
 
           <div className="flex gap-x-2 mt-1">
             {onEdit && (
-              <Button
-                variant="none"
+              <IconButton
+              icon={<FaPencilAlt size={13} />}
+              tooltip={"Edit comment"}
                 onClick={onEdit}
-                className="text-white/40 hover:text-green-400 transition"
-                text={<FaPencilAlt size={13} />}
+                className=" hover:text-green-400"
+
               />
             )}
             {onDelete && (
-              <Button
-                variant="none"
+              <IconButton
+              icon={<FaTrash size={13} />}
+              tooltip={"Delete comment"}
                 onClick={onDelete}
-                className="text-white/40 hover:text-red-400 transition"
-                text={<FaTrash size={13} />}
+                className=" hover:text-red-400"
+
               />
+              
             )}
           </div>
         </div>

@@ -14,6 +14,7 @@ import CourseVideoCard from "./CourseVideoCard/CourseVideoCard";
 import CommentsForm from "./Coments/ComentsForm";
 import CommentCard from "./Coments/CommentCard";
 import Avatar from "./Avatar/Avatar";
+import IconButton from "./Button/IconButton";
 
 export {
   Header,
@@ -32,4 +33,5 @@ export {
   CommentsForm,
   CommentCard,
   Avatar,
+  IconButton,
 };
