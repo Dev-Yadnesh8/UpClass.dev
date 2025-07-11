@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import { Comment } from "../models/comment.model.js";
 import { Video } from "../models/video.model.js";
 import ApiError from "../utils/apiError.js";
 import ApiResponse from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-
+import { ObjectId } from 'bson';
 const addComment = asyncHandler(async (req, res) => {
   //Step1: Get the video id and find video in db.
   const { videoId } = req.params;
@@ -74,7 +75,37 @@ const fetchAllComments = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Video not found");
   }
   //Step2: Send all comments of that video
-  const allComments = await Comment.find({ videoId });
+  // const allComments = await Comment.find({ videoId });
+  console.log("Video found",video);
+  
+
+const allComments = await Comment.aggregate([
+    {
+      $match:{videoId :new ObjectId(String(videoId))}
+    },{
+      $lookup:{
+        from: 'users',
+        localField:'commentedBy',
+        foreignField:'_id',
+        as:'commenterInfo'
+      }
+    },{
+      $unwind: '$commenterInfo'
+    },
+    {
+      $project:{
+        _id:1,
+        comment:1,
+        commentedBy:1,
+        updatedAt:1,
+        username:'$commenterInfo.username',
+        email:'$commenterInfo.email'
+
+      }
+    }
+    
+
+  ])
   if (!allComments) {
     throw new ApiError(404, "No comments found");
   }

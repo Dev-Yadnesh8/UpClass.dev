@@ -11,6 +11,8 @@ import FullPageLoader from "./Loader/FullPageLoader";
 import CourseWithProgressCard from "./CourseCard/CourseCardWithProgress";
 import CourseCard from "./CourseCard/CourseCard";
 import CourseVideoCard from "./CourseVideoCard/CourseVideoCard";
+import CommentsForm from "./Coments/ComentsForm";
+import CommentCard from "./Coments/CommentCard";
 
 export {
   Header,
@@ -26,4 +28,6 @@ export {
   AuthGate,
   FullPageLoader,
   CourseVideoCard,
+  CommentsForm,
+  CommentCard
 };

@@ -5,3 +5,4 @@ export const LOGOUT_ENPOINT = '/user/logout';
 export const REFRESH_TOKEN_ENPOINT = '/user/token/refresh';
 export const ALL_COURSES_ENPOINT = '/courses';
 export const PURCHASED_COURSES_ENPOINT = '/purchases';
+export const COMMENTS_ENPOINT = '/comment';

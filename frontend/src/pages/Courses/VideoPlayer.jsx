@@ -1,7 +1,10 @@
 import { useLocation, useParams } from "react-router-dom";
 import useApi from "../../hooks/useApi";
-import { ALL_COURSES_ENPOINT } from "../../utils/api/api_enpoints";
-import { Button } from "../../components";
+import {
+  ALL_COURSES_ENPOINT,
+  COMMENTS_ENPOINT,
+} from "../../utils/api/api_enpoints";
+import { Button, CommentCard, CommentsForm } from "../../components";
 import { axiosPrivateInstance } from "../../utils/api/axios";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -10,6 +13,8 @@ import { useEffect, useState } from "react";
 function VideoPlayerPage() {
   const { courseId, id } = useParams();
   const { user } = useSelector((state) => state.auth);
+  const [isCommentLoading, setIsCommentLoading] = useState(true);
+  const [comments, setComments] = useState();
   const { loading, data, error } = useApi(
     `${ALL_COURSES_ENPOINT}/${courseId}/videos/${id}`
   );
@@ -32,15 +37,57 @@ function VideoPlayerPage() {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    console.log("Deleting comment");
+    try {
+      const response = await axiosPrivateInstance.delete(
+        `${COMMENTS_ENPOINT}/${data?._id}/${commentId}`
+      );
+      const result = response.data;
+      if (!result.success) {
+        return toast.error("Failed to delete comment.");
+      }
+      toast.success(result?.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  {
+    /* FETCH COMMENTS */
+  }
+  useEffect(() => {
+    (async () => {
+      try {
+        setIsCommentLoading(true);
+        const response = await axiosPrivateInstance.get(
+          `${COMMENTS_ENPOINT}/${data?._id}`
+        );
+        const result = response.data;
+        if (!result.success) {
+          setIsCommentLoading(false);
+          return console.log("failed to get comments", result.message);
+        }
+        console.log("Comments", result);
+
+        setComments(result.data);
+      } catch (error) {
+      } finally {
+        setIsCommentLoading(false);
+      }
+    })();
+  }, [data]);
+  {
+    /* TRACK IS WATCHED STATUS */
+  }
   useEffect(() => {
     console.log("Data--", data);
     if (data && user?._id) {
       setIsWatchedByUser(data?.isWatched.includes(user._id));
     }
 
-    console.log("Is watched by user",isWatchedByUser);
+    console.log("Is watched by user", isWatchedByUser);
   }, [data]);
-
 
   if (loading)
     return <p className="text-center text-white mt-10">Loading...</p>;
@@ -48,7 +95,6 @@ function VideoPlayerPage() {
     return (
       <p className="text-center text-red-400 mt-10">Failed to load video</p>
     );
-
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6 text-white">
@@ -66,9 +112,42 @@ function VideoPlayerPage() {
         />
       </span>
 
-      {/* Comments Placeholder */}
-      <div className="bg-zinc-800 rounded-lg p-5 min-h-[200px]">
-        <p className="text-gray-400 italic">Comments section coming soon...</p>
+      {/* Comments Section */}
+      <div className="border border-footer-Bg my-3.5"></div>
+
+      <h2 className="text-xl font-semibold mb-4 text-white">Comments</h2>
+
+      {isCommentLoading && (
+        <p className="text-sm text-white/60">Loading comments...</p>
+      )}
+
+      <CommentsForm videoId={data?._id} />
+
+      <div className="mt-30 space-y-4">
+        {comments?.length > 0 ? (
+          comments.map((comment) => {
+            const isAuthor = comment.commentedBy === user._id;
+            return (
+              <CommentCard
+                key={comment._id}
+                comment={comment}
+                onEdit={
+                  isAuthor && (() => console.log("Edit comment", comment._id))
+                }
+                onDelete={
+                  isAuthor &&
+                  (() => {
+                    return deleteComment(comment._id);
+                  })
+                }
+              />
+            );
+          })
+        ) : (
+          <p className="text-sm text-white/50  text-center">
+            No comments yet. Be the first to add one!
+          </p>
+        )}
       </div>
     </div>
   );

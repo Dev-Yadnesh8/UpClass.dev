@@ -20,13 +20,15 @@ function Button({
     none: `bg-transparent text-white`,
   };
 
+  const disabledClasses = "opacity-30 cursor-not-allowed bg-black line-through hover:opacity-10";
+
   return (
     <button
       disabled={isDisabled}
       type={type}
-      onClick={onClick && onClick}
-      className={`${baseClasses} ${
-        variants[variant] || variants.solid
+      onClick={onClick && !isDisabled ? onClick : undefined}
+      className={`${baseClasses} ${variants[variant] || variants.solid} ${
+        isDisabled ? disabledClasses : "cursor-pointer"
       } ${className}`}
     >
       {text}

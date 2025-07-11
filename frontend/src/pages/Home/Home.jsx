@@ -11,6 +11,8 @@ export default function Home() {
   const navigate = useNavigate();
 
   const { isLoading, data, error } = useApi(ALL_COURSES_ENPOINT);
+  console.log("All courses",data);
+  
 
   return (
     <div className="max-w-[120rem] mx-auto my-8 px-3.5">

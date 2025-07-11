@@ -32,7 +32,7 @@ export default function BaseCourseCard({ course, onClick, children }) {
         {/* CTA Button */}
         <div className="mt-2 w-full">
           <Button
-            text="View Course"
+            text= "View Course"
             variant="filled"
             className="w-full"
             onClick={onClick}

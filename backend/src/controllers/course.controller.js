@@ -6,6 +6,7 @@ import { Course } from "../models/course.model.js";
 import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 
+
 const createCourse = asyncHandler(async (req, res) => {
   //Step1: Get details form admin
   const thumbnailPath = req.file || req.file?.path;
