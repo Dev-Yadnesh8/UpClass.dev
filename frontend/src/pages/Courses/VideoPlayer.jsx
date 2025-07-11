@@ -19,6 +19,8 @@ function VideoPlayerPage() {
     `${ALL_COURSES_ENPOINT}/${courseId}/videos/${id}`
   );
   const [isWatchedByUser, setIsWatchedByUser] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   const markVideoAsComplete = async () => {
     console.log("Marking as completed");
@@ -54,11 +56,40 @@ function VideoPlayerPage() {
     }
   };
 
+  const handleEditComment = async (commentId) => {
+    try {
+      const response = await axiosPrivateInstance.patch(
+        `${COMMENTS_ENPOINT}/${data._id}/${commentId}`,
+        { commentText: editingText }
+      );
+      const result = response.data;
+      if (!result.success) return toast.error(result.message);
+
+      // Update comment locally
+      setComments((prev) =>
+        prev.map((c) =>
+          c._id === commentId
+            ? {
+                ...c,
+                comment: editingText,
+                updatedAt: new Date().toISOString(),
+              }
+            : c
+        )
+      );
+      setEditingCommentId(null);
+      setEditingText("");
+      toast.success(result.message);
+    } catch (error) {
+      console.error("Error updating comment:", error);
+    }
+  };
+
   {
     /* FETCH COMMENTS */
   }
   useEffect(() => {
-    if(!data?._id) return;
+    if (!data?._id) return;
     (async () => {
       try {
         setIsCommentLoading(true);
@@ -123,7 +154,7 @@ function VideoPlayerPage() {
         <p className="text-sm text-white/60">Loading comments...</p>
       )}
 
-      <CommentsForm videoId={data?._id} setComments={setComments}/>
+      <CommentsForm videoId={data?._id} setComments={setComments} />
 
       <div className="mt-30 space-y-4">
         {comments?.length > 0 ? (
@@ -134,14 +165,21 @@ function VideoPlayerPage() {
                 key={comment._id}
                 comment={comment}
                 onEdit={
-                  isAuthor && (() => console.log("Edit comment", comment._id))
-                }
-                onDelete={
                   isAuthor &&
                   (() => {
-                    return deleteComment(comment._id);
+                    setEditingCommentId(comment._id);
+                    setEditingText(comment.comment);
                   })
                 }
+                onDelete={isAuthor && (() => deleteComment(comment._id))}
+                isEditing={editingCommentId === comment._id}
+                editingText={editingText}
+                setEditingText={setEditingText}
+                onSave={() => handleEditComment(comment._id)}
+                onCancel={() => {
+                  setEditingCommentId(null);
+                  setEditingText("");
+                }}
               />
             );
           })

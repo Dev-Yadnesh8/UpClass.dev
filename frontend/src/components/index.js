@@ -13,6 +13,7 @@ import CourseCard from "./CourseCard/CourseCard";
 import CourseVideoCard from "./CourseVideoCard/CourseVideoCard";
 import CommentsForm from "./Coments/ComentsForm";
 import CommentCard from "./Coments/CommentCard";
+import Avatar from "./Avatar/Avatar";
 
 export {
   Header,
@@ -29,5 +30,6 @@ export {
   FullPageLoader,
   CourseVideoCard,
   CommentsForm,
-  CommentCard
+  CommentCard,
+  Avatar,
 };

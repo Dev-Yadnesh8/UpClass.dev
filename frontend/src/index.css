@@ -11,3 +11,14 @@
     --color-footer-Bg : #1e1b4b;
 }
 
+@layer utilities {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    box-shadow: 0 0 0 1000px rgba(16, 14, 42, 0.2) inset !important; /* Your desired background */
+    -webkit-text-fill-color: #ffffff !important; /* Your desired text color */
+    caret-color: #ffffff;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+}
