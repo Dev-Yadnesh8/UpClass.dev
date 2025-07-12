@@ -5,6 +5,8 @@ import UserValidator from "../validators/user.validator.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { cookieOptions } from "../constants.js";
+import generateStrongOTP from "../utils/generateOTP.js";
+import sendEmail from "../utils/emailService.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -41,18 +43,22 @@ const signUp = asyncHandler(async (req, res) => {
     );
   }
 
-  // Step3 : Create user and store data in DB
+  // Step3 : Create user,verification token , expriy  and store data in DB
+
+  const verificationToken = generateStrongOTP();
 
   const user = await User.create({
     username,
     email,
     password,
     role: "USER",
+    verificationToken,
+    verificationTokenExpiry: new Date(Date.now() + 1000 * 60 * 30), // Will expire in 5 min after creation
   });
 
   // Step4 : Check if user is created or not & if exist remove password and refersh token field
   const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken"
+    "-password -refreshToken -verificationToken -verificationTokenExpiry -resetPasswordToken -resetPasswordTokenExpiry"
   );
   if (!createdUser) {
     throw new ApiError(
@@ -60,6 +66,8 @@ const signUp = asyncHandler(async (req, res) => {
       "Something went wrong while creating the user. Please try again later."
     );
   }
+
+  await sendEmail(user.email, verificationToken);
 
   // Setp5 : Send successful response
   return res
@@ -215,6 +223,28 @@ const currentUser = asyncHandler((req, res) => {
     .json(new ApiResponse(200, "User fetched successfully", req.user));
 });
 
+const verifyEmail = asyncHandler(async (req, res) => {
+  //Step1: Get the token form body;
+  const { verificationToken } = req.body;
+  //Step2: Check if user has the code and it not expired
+  const user = await User.findOne({
+    verificationToken,
+    verificationTokenExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new ApiError(400, "Invalid otp or otp expired");
+  }
+
+  //Step3: Update the isVerified status , verification token and expiry
+  user.isVerified = true;
+  ((user.verificationToken = undefined),
+    (user.verificationTokenExpiry = undefined),
+    await user.save());
+
+  res.status(200).json(new ApiResponse(200, "Email verified successfully!"));
+});
+
 export {
   signUp,
   signIn,
@@ -222,4 +252,5 @@ export {
   refreshAccessToken,
   changePassword,
   currentUser,
+  verifyEmail
 };
