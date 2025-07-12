@@ -41,7 +41,6 @@ const signInSchema = z.object({
 });
 
 const changePasswordSchema = z.object({
-  oldPassword: passwordSchema,
   newPassword: passwordSchema,
 });
 
