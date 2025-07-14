@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import {
@@ -11,10 +11,13 @@ import { AuthGate, Layout, PrivateRoute } from "./components/index.js";
 import {
   CourseContent,
   CourseDetails,
+  ForgotPassword,
   Login,
   MyCourses,
   NotFound,
+  ResetPassword,
   SignUp,
+  VerifyEmail,
   VideoPlayerPage,
 } from "./pages/index.js";
 import { Provider } from "react-redux";
@@ -29,6 +32,9 @@ const router = createBrowserRouter(
 
         <Route path="sign-in" element={<Login />} />
         <Route path="sign-up" element={<SignUp />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password/:token" element={<ResetPassword />} />
 
         {/* PRIVATE ROUTES */}
 
@@ -36,7 +42,10 @@ const router = createBrowserRouter(
         <Route element={<PrivateRoute />}>
           <Route path="courses" element={<MyCourses />} />
           <Route path="courses/:id" element={<CourseContent />} />
-          <Route path="courses/:courseId/video/:id" element={<VideoPlayerPage />} />
+          <Route
+            path="courses/:courseId/video/:id"
+            element={<VideoPlayerPage />}
+          />
           <Route path="course-details/:id" element={<CourseDetails />} />
         </Route>
 

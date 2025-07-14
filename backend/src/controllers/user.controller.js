@@ -75,7 +75,7 @@ const signUp = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        "Your account has been created. Let’s get started!",
+       "Your account has been created successfully. Please check your email to verify your account and activate access.",
         createdUser
       )
     );

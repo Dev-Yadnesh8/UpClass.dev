@@ -31,7 +31,7 @@ function SignUp() {
         toast.error(result.message);
       } else {
         toast.success(result.message);
-        navigate("/sign-in", { replace: true });
+        navigate("/verify-email", { replace: true });
       }
     } catch (error) {
       handleApiError(error, SIGN_UP_ENPOINT, "Failed to create account");

@@ -7,5 +7,21 @@ import NotFound from "./NotFound/NotFound";
 import CourseDetails from "./Courses/CourseDetails";
 import CourseContent from "./Courses/CourseContent";
 import VideoPlayerPage from "./Courses/VideoPlayer";
+import VerifyEmail from "./Auth/VerifyEmail";
+import ForgotPassword from "./Auth/ForgotPassword";
+import ResetPassword from "./Auth/ResetPassword";
 
-export { Landing, Login, SignUp, Home, MyCourses, NotFound, CourseDetails,CourseContent ,VideoPlayerPage};
+export {
+  Landing,
+  Login,
+  SignUp,
+  Home,
+  MyCourses,
+  NotFound,
+  CourseDetails,
+  CourseContent,
+  VideoPlayerPage,
+  VerifyEmail,
+  ForgotPassword,
+  ResetPassword
+};

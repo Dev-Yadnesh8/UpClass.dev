@@ -99,7 +99,11 @@ function Login() {
           />
 
           <div className="flex justify-end text-sm">
-            <Button text="Forget password" variant="text" />
+            <Button
+              text="Forget password"
+              variant="text"
+              onClick={() => navigate("/forgot-password")}
+            />
           </div>
 
           <Button text="Login" type="submit" className="w-full mt-2" />
