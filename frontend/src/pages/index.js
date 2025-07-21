@@ -10,6 +10,7 @@ import VideoPlayerPage from "./Courses/VideoPlayer";
 import VerifyEmail from "./Auth/VerifyEmail";
 import ForgotPassword from "./Auth/ForgotPassword";
 import ResetPassword from "./Auth/ResetPassword";
+import CreateCourse from "./Admin/CreateCourse";
 
 export {
   Landing,
@@ -23,5 +24,6 @@ export {
   VideoPlayerPage,
   VerifyEmail,
   ForgotPassword,
-  ResetPassword
+  ResetPassword,
+  CreateCourse,
 };

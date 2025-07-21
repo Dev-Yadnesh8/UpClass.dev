@@ -7,7 +7,7 @@ import { signUpSchema } from "../../utils/validators/auth";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import toast from "react-hot-toast";
 import { axiosInstance, SIGN_UP_ENPOINT } from "../../utils/api";
-import handleApiError from "../../utils/helper/handle_api_error";
+import handleApiError from "../../utils/api/handle_api_error";
 
 function SignUp() {
   const navigate = useNavigate();

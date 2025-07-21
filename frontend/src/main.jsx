@@ -11,6 +11,7 @@ import { AuthGate, Layout, PrivateRoute } from "./components/index.js";
 import {
   CourseContent,
   CourseDetails,
+  CreateCourse,
   ForgotPassword,
   Login,
   MyCourses,
@@ -47,6 +48,11 @@ const router = createBrowserRouter(
             element={<VideoPlayerPage />}
           />
           <Route path="course-details/:id" element={<CourseDetails />} />
+        </Route>
+        {/* ADMIN ROUTES */}
+        <Route index element={<AuthRedirect />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="create-course" element={<CreateCourse />} />
         </Route>
 
         {/* CATCH-ALL */}

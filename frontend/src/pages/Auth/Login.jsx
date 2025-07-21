@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../features/auth/authSlice";
 import { axiosInstance, SIGN_IN_ENPOINT } from "../../utils/api";
-import handleApiError from "../../utils/helper/handle_api_error";
+import handleApiError from "../../utils/api/handle_api_error";
 
 function Login() {
   const navigate = useNavigate();

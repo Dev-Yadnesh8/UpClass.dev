@@ -8,7 +8,7 @@ import { Button } from "../../components";
 import DOMPurify from "dompurify";
 import { axiosPrivateInstance } from "../../utils/api/axios";
 import toast from "react-hot-toast";
-import handleApiError from "../../utils/helper/handle_api_error";
+import handleApiError from "../../utils/api/handle_api_error";
 
 function CourseDetails() {
   const { id } = useParams();

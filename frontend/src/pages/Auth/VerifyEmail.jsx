@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Button } from "../../components";
 import toast from "react-hot-toast";
-import handleApiError from "../../utils/helper/handle_api_error";
+import handleApiError from "../../utils/api/handle_api_error";
 import { VERIFY_EMAIL_ENPOINT } from "../../utils/api/api_enpoints";
 import { axiosInstance } from "../../utils/api";
 import { useNavigate } from "react-router-dom";

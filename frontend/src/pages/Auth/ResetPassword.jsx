@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Input } from "../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { CHANGE_PASS_ENPOINT } from "../../utils/api/api_enpoints";
-import handleApiError from "../../utils/helper/handle_api_error";
+import handleApiError from "../../utils/api/handle_api_error";
 import { axiosInstance } from "../../utils/api";
 import toast from "react-hot-toast";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";

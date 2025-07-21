@@ -1,14 +1,16 @@
-import { FiHome, FiBookOpen, FiLogOut } from "react-icons/fi";
+import { FiHome, FiBookOpen, FiPlusCircle } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setSidebarCollapsed,
   setSidebarOpen,
 } from "../../features/sidebar/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { user } = useSelector((state) => state.auth);
   const { isSidebarOpen, isSidebarCollapsed } = useSelector(
     (state) => state.sidebar
   );
@@ -25,10 +27,13 @@ export default function Sidebar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [dispatch]);
+  useEffect(() => {
+    setIsAdmin(user?.role?.includes("ADMIN") || false);
+    console.log("IsAdmin", user?.role?.includes("ADMIN"));
+  }, [user]);
 
   const collapsed = isSidebarCollapsed;
   const isMobile = window.innerWidth < 768;
-
   return (
     <>
       {/* Overlay on mobile when sidebar is open */}
@@ -64,6 +69,14 @@ export default function Sidebar() {
             collapsed={collapsed}
           />
 
+          {isAdmin && (
+            <SidebarLink
+              icon={<FiPlusCircle size={18} />}
+              text="Create course"
+              to="/create-course"
+              collapsed={collapsed}
+            />
+          )}
         </nav>
       </aside>
     </>
