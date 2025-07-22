@@ -3,7 +3,7 @@ function IconButton({ icon, onClick, tooltip,className="" }) {
     <button
       onClick={onClick}
       title={tooltip}
-      className={`p-1.5 text-white transition cursor-pointer ${className }`}
+      className={`p-1.5 transition cursor-pointer ${className }`}
     >
       {icon}
     </button>

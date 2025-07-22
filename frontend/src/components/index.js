@@ -20,6 +20,12 @@ import AdminRoute from "./PrivateRoute/AdminRoute";
 import CreateCourseCard from "./CourseCard/CreateCourseCard";
 import AdminCourseCard from "./CourseCard/AdminCourseCard";
 import CourseForm from "./Form/CourseForm";
+import AddVideoCard from "./CourseCard/AddVideoCard";
+import AdminVideoCard from "./CourseVideoCard/AdminVideoCard";
+import VideoForm from "./Form/VideoForm";
+
+
+
 
 export {
   Header,
@@ -44,4 +50,7 @@ export {
   CreateCourseCard,
   AdminCourseCard,
   CourseForm,
+  AddVideoCard,
+  AdminVideoCard,
+  VideoForm,
 };

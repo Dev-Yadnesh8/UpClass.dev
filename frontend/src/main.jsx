@@ -14,13 +14,16 @@ import {
   PrivateRoute,
 } from "./components/index.js";
 import {
+  AddVideo,
   CourseContent,
   CourseDetails,
   CreateCourse,
   EditCourse,
+  EditVideo,
   ForgotPassword,
   Login,
   ManageCourse,
+  ManageCourseContent,
   MyCourses,
   NotFound,
   ResetPassword,
@@ -60,6 +63,9 @@ const router = createBrowserRouter(
             <Route path="admin/manage-courses" element={<ManageCourse />} />
             <Route path="admin/manage-courses/create" element={<CreateCourse />} />
             <Route path="admin/manage-courses/edit/:courseId" element={<EditCourse />} />
+            <Route path="admin/manage-courses/course/:courseId" element={<ManageCourseContent />} />
+            <Route path="admin/manage-courses/course/:courseId/video/add" element={<AddVideo />} />
+            <Route path="admin/manage-courses/course/:courseId/video/edit/:videoId" element={<EditVideo />} />
             {/* <Route path="admin/edit-course/:id" element={<EditCourse />} /> */}
             {/* <Route path="admin/add-videos/:id" element={<AddVideos />} /> */}
           </Route>

@@ -13,6 +13,10 @@ import ResetPassword from "./Auth/ResetPassword";
 import CreateCourse from "./Admin/CreateCourse";
 import ManageCourse from "./Admin/ManageCourse";
 import EditCourse from "./Admin/EditCourse";
+import ManageCourseContent from "./Admin/ManageCourseContent";
+import AddVideo from "./Admin/AddVideo";
+import EditVideo from "./Admin/EditVideo";
+
 
 
 
@@ -31,5 +35,8 @@ export {
   ResetPassword,
   CreateCourse,
   ManageCourse,
-  EditCourse
+  EditCourse,
+  AddVideo,
+  ManageCourseContent,
+  EditVideo
 };

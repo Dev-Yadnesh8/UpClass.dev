@@ -109,6 +109,8 @@ const deleteVideo = asyncHandler(async (req, res) => {
 });
 
 const editVideo = asyncHandler(async (req, res) => {
+  console.log("req--,",req);
+  
   //Step1: Get video id and validate it
   const { videoId, courseId } = req.params;
   if (

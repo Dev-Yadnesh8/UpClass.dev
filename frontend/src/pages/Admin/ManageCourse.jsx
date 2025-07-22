@@ -40,6 +40,9 @@ function ManageCourse() {
                 navigate(`/admin/manage-courses/edit/${course._id}`)
               }
               onDelete={() => handleDelete(course._id)}
+              onManageContent={() =>
+                navigate(`/admin/manage-courses/course/${course._id}`)
+              }
             />
           ))}
         </div>
