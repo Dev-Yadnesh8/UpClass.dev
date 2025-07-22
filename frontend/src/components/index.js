@@ -16,6 +16,10 @@ import CommentCard from "./Coments/CommentCard";
 import Avatar from "./Avatar/Avatar";
 import IconButton from "./Button/IconButton";
 import RTE from "./RTE/RTE";
+import AdminRoute from "./PrivateRoute/AdminRoute";
+import CreateCourseCard from "./CourseCard/CreateCourseCard";
+import AdminCourseCard from "./CourseCard/AdminCourseCard";
+import CourseForm from "./Form/CourseForm";
 
 export {
   Header,
@@ -36,4 +40,8 @@ export {
   Avatar,
   IconButton,
   RTE,
+  AdminRoute,
+  CreateCourseCard,
+  AdminCourseCard,
+  CourseForm,
 };

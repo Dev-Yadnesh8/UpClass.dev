@@ -7,13 +7,20 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { AuthGate, Layout, PrivateRoute } from "./components/index.js";
+import {
+  AdminRoute,
+  AuthGate,
+  Layout,
+  PrivateRoute,
+} from "./components/index.js";
 import {
   CourseContent,
   CourseDetails,
   CreateCourse,
+  EditCourse,
   ForgotPassword,
   Login,
+  ManageCourse,
   MyCourses,
   NotFound,
   ResetPassword,
@@ -29,17 +36,16 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<AuthGate />}>
       <Route path="/" element={<Layout />}>
-        {/* PUBLIC ROUTES */}
+        <Route index element={<AuthRedirect />} />
 
+        {/* Public */}
         <Route path="sign-in" element={<Login />} />
         <Route path="sign-up" element={<SignUp />} />
         <Route path="verify-email" element={<VerifyEmail />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="reset-password/:token" element={<ResetPassword />} />
 
-        {/* PRIVATE ROUTES */}
-
-        <Route index element={<AuthRedirect />} />
+        {/* Private */}
         <Route element={<PrivateRoute />}>
           <Route path="courses" element={<MyCourses />} />
           <Route path="courses/:id" element={<CourseContent />} />
@@ -48,14 +54,18 @@ const router = createBrowserRouter(
             element={<VideoPlayerPage />}
           />
           <Route path="course-details/:id" element={<CourseDetails />} />
-        </Route>
-        {/* ADMIN ROUTES */}
-        <Route index element={<AuthRedirect />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="create-course" element={<CreateCourse />} />
+
+          {/* Admin */}
+          <Route element={<AdminRoute />}>
+            <Route path="admin/manage-courses" element={<ManageCourse />} />
+            <Route path="admin/manage-courses/create" element={<CreateCourse />} />
+            <Route path="admin/manage-courses/edit/:courseId" element={<EditCourse />} />
+            {/* <Route path="admin/edit-course/:id" element={<EditCourse />} /> */}
+            {/* <Route path="admin/add-videos/:id" element={<AddVideos />} /> */}
+          </Route>
         </Route>
 
-        {/* CATCH-ALL */}
+        {/* Catch all */}
         <Route path="*" element={<NotFound />} />
       </Route>
     </Route>

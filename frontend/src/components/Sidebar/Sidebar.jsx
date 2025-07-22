@@ -6,6 +6,7 @@ import {
 } from "../../features/sidebar/sidebarSlice";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -71,9 +72,9 @@ export default function Sidebar() {
 
           {isAdmin && (
             <SidebarLink
-              icon={<FiPlusCircle size={18} />}
-              text="Create course"
-              to="/create-course"
+              icon={<FaChalkboardTeacher size={18} />}
+              text="Manage courses"
+              to="/admin/manage-courses"
               collapsed={collapsed}
             />
           )}

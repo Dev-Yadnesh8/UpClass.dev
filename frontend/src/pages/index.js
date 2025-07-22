@@ -11,6 +11,10 @@ import VerifyEmail from "./Auth/VerifyEmail";
 import ForgotPassword from "./Auth/ForgotPassword";
 import ResetPassword from "./Auth/ResetPassword";
 import CreateCourse from "./Admin/CreateCourse";
+import ManageCourse from "./Admin/ManageCourse";
+import EditCourse from "./Admin/EditCourse";
+
+
 
 export {
   Landing,
@@ -26,4 +30,6 @@ export {
   ForgotPassword,
   ResetPassword,
   CreateCourse,
+  ManageCourse,
+  EditCourse
 };
