@@ -8,8 +8,12 @@ import mongoose from "mongoose";
 
 
 const createCourse = asyncHandler(async (req, res) => {
+  console.log("REQ",req);
+  
   //Step1: Get details form admin
   const thumbnailPath = req.file || req.file?.path;
+  console.log("THUMBNAIL PATH,",thumbnailPath);
+  
   if (!thumbnailPath) {
     throw new ApiError(400, "Thumbnail is required");
   }

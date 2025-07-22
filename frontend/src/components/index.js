@@ -15,6 +15,7 @@ import CommentsForm from "./Coments/ComentsForm";
 import CommentCard from "./Coments/CommentCard";
 import Avatar from "./Avatar/Avatar";
 import IconButton from "./Button/IconButton";
+import RTE from "./RTE/RTE";
 
 export {
   Header,
@@ -34,4 +35,5 @@ export {
   CommentCard,
   Avatar,
   IconButton,
+  RTE,
 };

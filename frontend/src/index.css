@@ -22,3 +22,20 @@
     transition: background-color 9999s ease-in-out 0s;
   }
 }
+
+
+.jodit-container {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+  border-color: #333 !important;
+}
+
+.jodit-toolbar__box {
+  background-color: #2a2a2a !important;
+  border-color: #333 !important;
+}
+
+.jodit-status-bar {
+  background-color: #1e1e1e !important;
+  color: #aaa !important;
+}
